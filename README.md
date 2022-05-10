@@ -4,7 +4,7 @@ Repo del ecommerce que desarrollaremos con FastAPI en #hagamos-equipo de Python 
 
 
 ### Itegrantes (usuarios discord)
-@Her204 --> 
+@Her204 --> Herbert Vente 
 
 @javierespinoza --> Javier Espinoza
 
