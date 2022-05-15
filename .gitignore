@@ -1,0 +1,5 @@
+#caches
+__pycache__
+
+#virtualenv entorno de desarrollo
+env
