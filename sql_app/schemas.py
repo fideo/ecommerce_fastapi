@@ -1,3 +1,4 @@
+from sqlite3 import Date
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -47,6 +48,20 @@ class Vendedor(VendedorBase):
     vendedor_id: int
     esta_activo: bool
     productos_publicados: List[Producto] = []
+
+    class Config:
+        orm_mode = True
+
+
+class VentasBase(BaseModel):
+    fecha_venta: Date
+    numero_de_productos_comprados: int
+    precio_total_de_venta: int
+    producto_id: int
+
+
+class Ventas(VentasBase):
+    venta_id: int
 
     class Config:
         orm_mode = True
