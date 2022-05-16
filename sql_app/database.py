@@ -6,9 +6,10 @@ from sqlalchemy.orm import sessionmaker
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./ecommerce_fastapi.db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL,connect_args={"checl_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"checl_same_thread": False}
+)
 
-SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
-

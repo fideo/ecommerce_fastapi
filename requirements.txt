@@ -5,6 +5,8 @@ fastapi==0.76.0
 greenlet==1.1.2
 h11==0.13.0
 idna==3.3
+Jinja2==3.1.2
+MarkupSafe==2.1.1
 pydantic==1.9.0
 sniffio==1.2.0
 SQLAlchemy==1.4.36
