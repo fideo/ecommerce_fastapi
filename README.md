@@ -10,7 +10,7 @@ Repo del ecommerce que desarrollaremos con FastAPI en #hagamos-equipo de Python 
 
 @Fideox --> Federico Mazzei
 
-@leo.guanco --> 
+@leo.guanco --> Leo Guanco 
 
 
 
