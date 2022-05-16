@@ -42,7 +42,7 @@ class Producto(Base):
     )
 
 
-class Ventas(Base):
+class Venta(Base):
     __tablename__ = "ventas"
 
     venta_id = Column(Integer, primary_key=True, index=True)
