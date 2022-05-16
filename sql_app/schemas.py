@@ -56,7 +56,7 @@ class Vendedor(VendedorBase):
 class VentasBase(BaseModel):
     fecha_venta: Date
     numero_de_productos_comprados: int
-    precio_total_de_venta: int
+    precio_total_de_venta: float
     producto_id: int
 
 

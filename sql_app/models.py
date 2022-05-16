@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -48,6 +48,6 @@ class Ventas(Base):
     venta_id = Column(Integer, primary_key=True, index=True)
     fecha_de_venta = Column(Date)
     numero_de_productos_comprados = Column(Integer)
-    precio_total_de_venta = Column(Integer)
+    precio_total_de_venta = Column(Float)
     producto_id = Column(Integer, ForeignKey("Producto.producto_id"))
     producto = relationship("Producto", back_populates="ventas_realizadas")
