@@ -2,6 +2,15 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 import datetime
 
+
+def crear_usuario():
+    pass
+
+
+def crear_vendedor():
+    pass
+
+
 def crear_producto(db: Session, 
                         producto:schemas.ProductoCreate,
                         vendedor_id:int):
@@ -20,7 +29,8 @@ def crear_producto(db: Session,
     
 
 def eliminar_producto(db: Session, producto_id: int):
-    producto_a_eliminar = db.query(models.Producto).filter(models.Producto.producto_id == producto_id).first()
+    producto_a_eliminar = db.query(models.Producto).filter(
+                            models.Producto.producto_id == producto_id).first()
 
     if producto_a_eliminar is None:
         return
@@ -30,12 +40,12 @@ def eliminar_producto(db: Session, producto_id: int):
 
     return producto_a_eliminar
 
-def cambiar_nombre_de_producto():
-    pass
 
 def buscar_producto(db: Session, palabra_clave:str):
-    encuentra = "%{}%".format(palabra_clave)
-    return db.query(models.Product).filter(db.tags.like(encuentra).all())
+    palabra_a_buscar = "%{}%".format(palabra_clave)
+    return db.query(models.Producto).filter(
+                models.Producto.nombre_producto.like(palabra_a_buscar).all())
+
 
 def subir_producto_a_carrito():
     pass

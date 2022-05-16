@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date
 from sqlalchemy.orm import relationship
-from database import Base
+from .database import Base
 
 
 class Usuario(Base):
@@ -19,7 +19,7 @@ class Vendedor(Base):
 
     vendedor_id = Column(Integer, primary_key=True, index=True)
     correo_de_vendedor = Column(String, unique=True)
-    nombre = Columns(String)
+    nombre = Column(String)
     contraseña_encriptada = Column(String)
     pais = Column(String)
     ciudad = Column(String)
@@ -44,7 +44,7 @@ class Producto(Base):
     )
 
 
-class Venta(Base):
+"""class Venta(Base):
     __tablename__ = "ventas"
 
     venta_id = Column(Integer, primary_key=True, index=True)
@@ -53,3 +53,4 @@ class Venta(Base):
     precio_total_de_venta = Column(Float)
     producto_id = Column(Integer, ForeignKey("Producto.producto_id"))
     producto = relationship("Producto", back_populates="ventas_realizadas")
+"""
