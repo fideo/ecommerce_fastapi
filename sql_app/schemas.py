@@ -3,7 +3,7 @@ from typing import Any, List, Optional
 from pydantic import BaseModel
 from datetime import datetime
 
-
+# Inicio schema de Usuario
 class UsuarioBase(BaseModel):
     correo_de_vendedor: str
 
@@ -18,8 +18,9 @@ class Usuario(UsuarioBase):
 
     class Config:
         orm_mode = True
+# Fin schema de Usuario
 
-
+# Inicio schema de Producto
 class ProductoBase(BaseModel):
     nombre_producto: str
     fecha_de_publicacion: datetime
@@ -38,8 +39,9 @@ class Producto(ProductoBase):
 
     class Config:
         orm_mode = True
+# Fin schema de Producto
 
-
+# Inicio schema de Vendedor
 class VendedorBase(BaseModel):
     correo_de_vendedor: str
     pais: str
@@ -69,7 +71,9 @@ class VentaBase(BaseModel):
         super().__init__(**data)
         __pydantic_self__.fecha_venta = Date()
 
+# Fin schema de Vendedor
 
+# Inicio schema de Venta
 class VentaCreate(VentaBase):
     pass
 
@@ -79,3 +83,4 @@ class Venta(VentaBase):
 
     class Config:
         orm_mode = True
+# Fin schema de Venta

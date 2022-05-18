@@ -44,6 +44,14 @@ class Producto(Base):
         "Vendedor", back_populates="productos_publicados"
     )
 
+class Categoria(Base):
+    __tablename__ = "categorias"
+
+    categoria_id = Column(Integer, primary_key=True, index=True)
+    nombre_categoria = Column(String)
+    descripcion = Column(String)
+    
+    
 
 """class Venta(Base):
     __tablename__ = "ventas"
