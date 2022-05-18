@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request,Depends
+from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -13,7 +13,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
 
 app = FastAPI()
 
@@ -39,4 +38,3 @@ async def crear_producto_nuevo(
 @app.get("/buscar_producto",response_model=schemas.Producto)
 async def buscar_producto(palabra_clave:str,db: Session = Depends(get_db)):
     return crud.buscar_producto(db=db,palabra_clave=palabra_clave)
-    

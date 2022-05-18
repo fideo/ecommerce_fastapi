@@ -3,6 +3,7 @@ from typing import Any, List, Optional
 from pydantic import BaseModel
 from datetime import datetime
 
+
 class UsuarioBase(BaseModel):
     correo_de_vendedor: str
 
@@ -48,7 +49,6 @@ class VendedorBase(BaseModel):
     
 class VendedorCreate(VendedorBase):
     constraseña_encriptada: str
-
 
 class Vendedor(VendedorBase):
     vendedor_id: int
