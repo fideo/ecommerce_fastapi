@@ -1,6 +1,7 @@
 from sqlite3 import Date
 from typing import Any, List, Optional
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class UsuarioBase(BaseModel):
@@ -20,7 +21,10 @@ class Usuario(UsuarioBase):
 
 
 class ProductoBase(BaseModel):
-    titulo: str
+    nombre_producto: str
+    fecha_de_publicacion: datetime
+    numero_de_productos_subidos: int
+    precio_unitario_de_producto: int
     descripcion: Optional[str] = None
 
 
@@ -37,12 +41,14 @@ class Producto(ProductoBase):
 
 
 class VendedorBase(BaseModel):
-    correo_de_usuario: str
-
-
+    correo_de_vendedor: str
+    pais: str
+    nombre: str
+    ciudad: str
+    
+    
 class VendedorCreate(VendedorBase):
-    password: str
-
+    constraseña_encriptada: str
 
 class Vendedor(VendedorBase):
     vendedor_id: int
