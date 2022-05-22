@@ -50,6 +50,7 @@ class Categoria(Base):
     categoria_id = Column(Integer, primary_key=True, index=True)
     nombre_categoria = Column(String)
     descripcion = Column(String)
+    activo = Column(Boolean)
     
     
 
