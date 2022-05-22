@@ -27,7 +27,16 @@ async def index(request: Request):
   }
   return templates.TemplateResponse("index.html", context)
 
-@app.post("/vendedor/{vendedor_id}/productos/",response_model=schemas.Producto)
+@app.post("/crear_vendedor",response_model=schemas.Vendedor)
+async def crear_vendedor(
+    correo_de_vendedor:str,pais:str,nombre:str,
+    ciudad:str,constraseña_encriptada:str,
+    db: Session = Depends(get_db)
+):
+    return crud.crear_vendedor(db=db,nombre=nombre,pais=pais,ciudad=ciudad,
+                            correo_de_vendedor=correo_de_vendedor,contrase_encriptada=contraseña_encriptada)
+
+@app.post("/productos/{vendedor_id}/",response_model=schemas.Producto)
 async def crear_producto_nuevo(
     vendedor_id: int,
     producto:schemas.ProductoCreate,
