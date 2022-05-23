@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, Table
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -50,7 +50,14 @@ class Categoria(Base):
     categoria_id = Column(Integer, primary_key=True, index=True)
     nombre_categoria = Column(String)
     descripcion = Column(String)
-    
+    activo = Column(Boolean)
+
+association_table = Table(
+    "producto_categoria",
+    Base.metadata,
+    Column("categoria_id", ForeignKey("categorias.categoria_id")),
+    Column("producto_id", ForeignKey("productos.producto_id")),
+) 
     
 
 """class Venta(Base):

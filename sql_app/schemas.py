@@ -41,6 +41,24 @@ class Producto(ProductoBase):
         orm_mode = True
 # Fin schema de Producto
 
+# Inicio schema de Categoría
+class CategoriaBase(BaseModel):
+    categoria_id: int
+    nombre_categoria: str
+
+class CategoriaCreate(CategoriaBase):
+    pass
+
+
+class Categoria(CategoriaBase):
+    categoria_id: int
+    categoria_del_producto_id: int
+
+    class Config:
+        orm_mode = True
+
+# Fin schema de Categoría
+
 # Inicio schema de Vendedor
 class VendedorBase(BaseModel):
     correo_de_vendedor: str
