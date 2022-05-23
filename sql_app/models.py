@@ -1,6 +1,4 @@
-from sqlalchemy import (Boolean, Column, Float,
-                        ForeignKey, Integer,
-                        Table, String, Date)
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from .database import Base
@@ -89,6 +87,21 @@ class Producto(Base):
             secondary="ventas_de_productos",
             back_populates="productos")
 
+class Categoria(Base):
+    __tablename__ = "categorias"
+
+    categoria_id = Column(Integer, primary_key=True, index=True)
+    nombre_categoria = Column(String)
+    descripcion = Column(String)
+    activo = Column(Boolean)
+
+association_table = Table(
+    "producto_categoria",
+    Base.metadata,
+    Column("categoria_id", ForeignKey("categorias.categoria_id")),
+    Column("producto_id", ForeignKey("productos.producto_id")),
+) 
+    
 
 class Venta(Base):
     __tablename__ = "ventas"

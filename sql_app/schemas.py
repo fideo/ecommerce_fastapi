@@ -3,7 +3,7 @@ from typing import Any, List, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-
+# Inicio schema de Usuario
 class UsuarioBase(BaseModel):
     correo_de_vendedor: str
 
@@ -26,6 +26,11 @@ class VentaBase(BaseModel):
 class VentaCreate(VentaBase):
     pass
 
+    class Config:
+        orm_mode = True
+# Fin schema de Usuario
+
+# Inicio schema de Producto
 class ProductoBase(BaseModel):
     nombre_producto: str
     fecha_de_publicacion: datetime
@@ -38,6 +43,33 @@ class ProductoCreate(ProductoBase):
     pass
 
 
+class Producto(ProductoBase):
+    producto_id: int
+    vendedor_del_producto_id: int
+
+    class Config:
+        orm_mode = True
+# Fin schema de Producto
+
+# Inicio schema de Categoría
+class CategoriaBase(BaseModel):
+    categoria_id: int
+    nombre_categoria: str
+
+class CategoriaCreate(CategoriaBase):
+    pass
+
+
+class Categoria(CategoriaBase):
+    categoria_id: int
+    categoria_del_producto_id: int
+
+    class Config:
+        orm_mode = True
+
+# Fin schema de Categoría
+
+# Inicio schema de Vendedor
 class VendedorBase(BaseModel):
     correo_de_vendedor: str
     pais: str
@@ -59,10 +91,9 @@ class VentaBase(BaseModel):
         super().__init__(**data)
         __pydantic_self__.fecha_venta = Date()
 
+# Fin schema de Vendedor
 
-class VentaCreate(VentaBase):
-    pass
-
+# Inicio schema de Venta
 
 class Vendedor(VendedorBase):
     vendedor_id: int
@@ -95,3 +126,4 @@ class Venta(VentaBase):
 
     class Config:
         orm_mode = True
+# Fin schema de Venta
