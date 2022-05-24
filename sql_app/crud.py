@@ -59,3 +59,31 @@ def buscar_producto(db: Session, palabra_clave:str):
 
 def subir_producto_a_carrito():
     pass
+
+def crear_categoria(db: Session, categoria:schemas.CategoriaCreate):
+    
+    db_categoria = models.Categoria(
+        nombre_categoria = categoria.nombre_categoria,
+        descripcion = categoria.descripcion,
+        esta_activo = categoria.esta_activo
+    )
+
+    db.add(db_categoria)
+    db.commit()
+    db.refresh(db_categoria)
+    return db_categoria
+
+def eliminar_categoria(db: Session, categoria_id: int):
+    categoria_a_eliminar = db.query(models.Categoria).filter(
+                                models.Categoria.categoria_id == categoria_id).first()
+    
+    if categoria_a_eliminar is None:
+        return
+    
+    db.delete(categoria_a_eliminar)
+    db.commit()
+
+def modificar_categoria(db: Session, categoria_id: int, categoria:schemas.CategoriaCreate):
+    db.query(models.Categoria).filter(
+                                models.Categoria.categoria_id == categoria_id).update(categoria)
+    db.commit()
