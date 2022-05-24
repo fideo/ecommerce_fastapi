@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, Table
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.associationproxy import association_proxy 
 from .database import Base
 
 
@@ -12,6 +12,11 @@ vendedores_de_productos = Table('vendedores_de_productos', Base.metadata,
 ventas_de_productos = Table('ventas_de_productos', Base.metadata,
     Column('ventas_id', ForeignKey('ventas.venta_id'), primary_key=True),
     Column('producto_id', ForeignKey('productos.producto_id'), primary_key=True)
+)
+
+categorias_de_productos = Table("categorias_de_productos", Base.metadata,
+    Column("categoria_id", ForeignKey("categorias.categoria_id"), primary_key=True),
+    Column("producto_id", ForeignKey("productos.producto_id"), primary_key=True),
 )
 
 """class VendedorDeProducto(Base):
@@ -68,6 +73,19 @@ class Vendedor(Base):
         secondary="vendedores_de_productos",
         back_populates="vendedores"
     )
+   
+class Categoria(Base):
+    __tablename__ = "categorias"
+
+    categoria_id = Column(Integer, primary_key=True, index=True)
+    nombre_categoria = Column(String, unique=True)
+    descripcion = Column(String)
+    esta_activo = Column(Boolean)
+    productos = relationship(
+        "Producto", 
+        secondary="categorias_de_productos",
+        back_populates="categorias"
+        )
 
 
 class Producto(Base):
@@ -86,22 +104,12 @@ class Producto(Base):
             "Venta",
             secondary="ventas_de_productos",
             back_populates="productos")
+    categorias = relationship(
+            "Categoria",
+            secondary = "categorias_de_productos",
+            back_populates = "productos"
+    )
 
-class Categoria(Base):
-    __tablename__ = "categorias"
-
-    categoria_id = Column(Integer, primary_key=True, index=True)
-    nombre_categoria = Column(String)
-    descripcion = Column(String)
-    activo = Column(Boolean)
-
-association_table = Table(
-    "producto_categoria",
-    Base.metadata,
-    Column("categoria_id", ForeignKey("categorias.categoria_id")),
-    Column("producto_id", ForeignKey("productos.producto_id")),
-) 
-    
 
 class Venta(Base):
     __tablename__ = "ventas"
