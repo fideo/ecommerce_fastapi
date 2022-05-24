@@ -55,17 +55,15 @@ class Producto(ProductoBase):
 class CategoriaBase(BaseModel):
     categoria_id: int
     nombre_categoria: str
+    descripcion: str
+    esta_activo: bool
 
 class CategoriaCreate(CategoriaBase):
     pass
 
-
 class Categoria(CategoriaBase):
     categoria_id: int
     nombre_categoria: str
-    descripcion: str
-    esta_activo: bool
-    categorias_productos: int
 
     class Config:
         orm_mode = True
