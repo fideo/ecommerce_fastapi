@@ -1,7 +1,7 @@
 import datetime
 from sqlalchemy.orm import Session
 from sql_app.database import engine
-from sql_app.models import Vendedor,Producto
+from sql_app.models import Vendedor, Producto, Categoria
 
 with Session(bind=engine) as session:
 
@@ -30,10 +30,17 @@ with Session(bind=engine) as session:
                     numero_de_productos_subidos = 8,
                     precio_unitario_de_producto =2000)
     
+    categoria1 = Categoria(nombre_categoria = "aderezos", descripcion = "condimentos para la comida", esta_activo = True)
+    categoria2 = Categoria(nombre_categoria = "bebidas", descripcion = "todo tipos de bebidas", esta_activo = True)
+    categoria3 = Categoria(nombre_categoria = "electrodomésticos", descripcion = "articulos para el hogar", esta_activo = True)
+    
     producto1.vendedores = [vendedor1]
     producto2.vendedores = [vendedor2]
     producto3.vendedores = [vendedor1,vendedor2]
+    producto1.categorias = [categoria1]
+    producto2.categorias = [categoria1]
+    producto3.categorias = [categoria1]
     
-    session.add_all([vendedor1, vendedor2, producto1, producto2, producto3])
+    session.add_all([vendedor1, vendedor2, producto1, producto2, producto3, categoria1, categoria2, categoria3])
     session.commit()
 

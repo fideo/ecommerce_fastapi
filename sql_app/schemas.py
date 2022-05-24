@@ -62,7 +62,10 @@ class CategoriaCreate(CategoriaBase):
 
 class Categoria(CategoriaBase):
     categoria_id: int
-    categoria_del_producto_id: int
+    nombre_categoria: str
+    descripcion: str
+    esta_activo: bool
+    categorias_productos: int
 
     class Config:
         orm_mode = True
