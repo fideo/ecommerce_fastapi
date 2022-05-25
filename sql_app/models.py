@@ -63,7 +63,7 @@ class Vendedor(Base):
 
     vendedor_id = Column(Integer, primary_key=True, index=True)
     correo_de_vendedor = Column(String, unique=True)
-    nombre = Column(String)
+    nombre = Column(String,nullable=False)
     contraseña_encriptada = Column(String)
     pais = Column(String)
     ciudad = Column(String)
@@ -92,7 +92,7 @@ class Producto(Base):
     __tablename__ = "productos"
 
     producto_id = Column(Integer, primary_key=True, index=True)
-    nombre_producto = Column(String)
+    nombre_producto = Column(String,nullable=False)
     fecha_de_publicacion = Column(Date)
     numero_de_productos_subidos = Column(Integer)
     precio_unitario_de_producto = Column(Integer)
@@ -116,7 +116,7 @@ class Venta(Base):
 
     venta_id = Column(Integer, primary_key=True, index=True)
     fecha_de_venta = Column(Date)
-    numero_de_productos_comprados = Column(Integer)
+    numero_de_productos_comprados = Column(Integer,nullable=False)
     precio_total_de_venta = Column(Float)
     productos = relationship(
             "Producto",
