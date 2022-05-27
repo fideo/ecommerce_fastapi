@@ -1,3 +1,6 @@
+from typing import List
+from urllib import request
+
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -26,6 +29,15 @@ async def index(request: Request):
     "request": request,
   }
   return templates.TemplateResponse("index.html", context)
+
+@app.get('/categorias/')
+def mostrar_categorias(request: Request,db: Session = Depends(get_db)):
+    categorias = crud.obtener_categorias(db)
+    context = {
+        "request": request, 
+        "categorias": categorias
+        }
+    return templates.TemplateResponse("categorias.html", context)
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(
