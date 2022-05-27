@@ -31,13 +31,12 @@ async def index(request: Request):
   return templates.TemplateResponse("index.html", context)
 
 @app.get('/categorias/')
-def mostrar_categorias(request: Request,db: Session = Depends(get_db)):
+def mostrar_categorias(db: Session = Depends(get_db)):
     categorias = crud.obtener_categorias(db)
     context = {
-        "request": request, 
-        "categorias": categorias
+            "categorias": categorias
         }
-    return templates.TemplateResponse("categorias.html", context)
+    return context
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(
