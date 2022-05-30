@@ -52,9 +52,8 @@ def eliminar_producto(db: Session, producto_id: int):
 
 
 def buscar_producto(db: Session, palabra_clave:str):
-    palabra_a_buscar = "%{}%".format(palabra_clave)
     return db.query(models.Producto).filter(
-                models.Producto.nombre_producto.like(palabra_a_buscar).all())
+                models.Producto.nombre_producto.contains(palabra_clave)).all()
 
 
 def subir_producto_a_carrito():

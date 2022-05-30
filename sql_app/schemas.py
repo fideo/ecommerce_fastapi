@@ -45,7 +45,6 @@ class ProductoCreate(ProductoBase):
 
 class Producto(ProductoBase):
     producto_id: int
-    vendedor_del_producto_id: int
 
     class Config:
         orm_mode = True
