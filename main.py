@@ -1,3 +1,6 @@
+from typing import List
+from urllib import request
+
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -28,7 +31,15 @@ async def index(request: Request):
   }
   return templates.TemplateResponse("index.html", context)
 
-@app.post("/crear_vendedor",response_model=schemas.VendedorCreate)
+@app.get('/categorias/')
+def mostrar_categorias(db: Session = Depends(get_db)):
+    categorias = crud.obtener_categorias(db)
+    context = {
+            "categorias": categorias
+        }
+    return context
+
+@app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(
     correo_de_vendedor:str,pais:str,nombre:str,
     ciudad:str,constraseña_encriptada:str,

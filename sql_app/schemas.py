@@ -51,23 +51,24 @@ class Producto(ProductoBase):
 # Fin schema de Producto
 
 # Inicio schema de Categoría
-class CategoriaBase(BaseModel):
-    categoria_id: int
-    nombre_categoria: str
-
-class CategoriaCreate(CategoriaBase):
-    pass
-
-
-class Categoria(CategoriaBase):
-    categoria_id: int
+class Categoria(BaseModel):
+    categoria_id: Optional[int]
     nombre_categoria: str
     descripcion: str
     esta_activo: bool
-    categorias_productos: int
-
     class Config:
         orm_mode = True
+
+class ActualizarCategoria(BaseModel):
+    nombre_categoria: str
+    descripcion: str
+    esta_activo: bool
+    class Config:
+        orm_mode = True
+
+class EliminarCategoria(BaseModel):
+    categoria_id: int
+    mensaje: str
 
 # Fin schema de Categoría
 
