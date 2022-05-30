@@ -48,7 +48,7 @@ async def crear_vendedor(
     return crud.crear_vendedor(db=db,nombre=nombre,pais=pais,ciudad=ciudad,
                             correo_de_vendedor=correo_de_vendedor,contraseña_encriptada=contraseña_encriptada)
 
-@app.post("/productos/{vendedor_id}/",response_model=schemas.ProductoCreate)
+@app.post("/crear_producto",response_model=schemas.ProductoCreate)
 async def crear_producto_nuevo(
     vendedor_id: int,
     producto:schemas.ProductoCreate,
