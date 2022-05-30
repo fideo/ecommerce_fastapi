@@ -34,9 +34,23 @@ async def index(request: Request):
 def mostrar_categorias(db: Session = Depends(get_db)):
     categorias = crud.obtener_categorias(db)
     context = {
-            "categorias": categorias
-        }
+        "categorias": categorias
+    }
     return context
+
+@app.post('/categorias/', response_model=schemas.Categoria)
+def crear_categoria(categoria:schemas.Categoria, db: Session = Depends(get_db)):
+    return crud.crear_categorias(categoria=categoria, db=db)
+
+
+@app.post('/eliminar_categorias/{categoria_id}', response_model=schemas.EliminarCategoria)
+def eliminar_categorias(categoria_id: int, db: Session = Depends(get_db)):
+    return crud.eliminar_categorias(categoria_id=categoria_id, db=db)
+
+
+@app.post('/actualizar_categoria/{categoria_id}', response_model=schemas.ActualizarCategoria)
+def actualizar_categoria(categoria_id: int, categoria_actualizada:schemas.ActualizarCategoria, db: Session = Depends(get_db)):
+    return crud.actualizar_categorias(categoria_id=categoria_id, categoria_actualizada=categoria_actualizada,  db=db)
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(

@@ -70,6 +70,8 @@ class ActualizarCategoria(BaseModel):
 class EliminarCategoria(BaseModel):
     categoria_id: int
     mensaje: str
+    class Config:
+        orm_mode = True
 
 # Fin schema de Categoría
 
