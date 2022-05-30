@@ -12,7 +12,7 @@ def crear_vendedor(db: Session,
 
     db_vendedor = models.Vendedor(nombre=vendedor.nombre,
                             correo_de_vendedor=vendedor.correo_de_vendedor,
-                            contraaeña_encriptada=vendedor.contraseña_encriptada,
+                            contraseña_encriptada=vendedor.contraseña_encriptada,
                             pais=vendedor.pais,
                             ciudad=vendedor.ciudad)
     db.add(db_vendedor)

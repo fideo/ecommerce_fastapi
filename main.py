@@ -40,8 +40,11 @@ def mostrar_categorias(db: Session = Depends(get_db)):
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(
-    correo_de_vendedor:str,pais:str,nombre:str,
-    ciudad:str,constraseña_encriptada:str,
+    correo_de_vendedor:str,
+    pais:str,
+    nombre:str,
+    ciudad:str,
+    constraseña_encriptada:str,
     db: Session = Depends(get_db)
 ):
     return crud.crear_vendedor(db=db,nombre=nombre,pais=pais,ciudad=ciudad,
