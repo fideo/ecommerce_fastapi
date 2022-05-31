@@ -6,7 +6,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sql_app import crud,models,schemas
-from routers.categorias import main 
+from routers.categorias import main as categorias
+from routers.productos import main as productos
+from routers.usuarios import main as usuarios
 from admin.routers.categorias import main as adminCategorias
 from sql_app.database import SessionLocal, engine
 from sqlalchemy.orm import Session
@@ -29,9 +31,17 @@ async def index(request: Request):
 
 @app.get('/categorias/')
 def mostrar_categorias(db: Session = Depends(get_db)):
-    categoria = main.obtener_categorias(db=db)
+    categoria = categorias.obtener_categorias(db=db)
     context = {
         "categorias": categoria
+    }
+    return context
+
+@app.get('/productos/')
+def mostrar_productos(db: Session = Depends(get_db)):
+    producto = productos.obtener_productos(db=db)
+    context = {
+        "productos": producto
     }
     return context
 
@@ -48,6 +58,16 @@ def eliminar_categorias(categoria_id: int, db: Session = Depends(get_db)):
 @app.post('/actualizar_categoria/{categoria_id}', response_model=schemas.ActualizarCategoria)
 def actualizar_categoria(categoria_id: int, categoria_actualizada:schemas.ActualizarCategoria, db: Session = Depends(get_db)):
     return adminCategorias.actualizar_categorias(categoria_id=categoria_id, categoria_actualizada=categoria_actualizada,  db=db)
+
+
+@app.get('/usuarios/')
+def mostrar_usuarios(db: Session = Depends(get_db)):
+    usuario = usuarios.obtener_usuarios(db=db)
+    context = {
+        "categorias": usuario
+    }
+    return context
+
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(
