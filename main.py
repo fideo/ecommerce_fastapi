@@ -6,16 +6,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sql_app import crud,models,schemas
+from routers.categorias import main 
+from admin.routers.categorias import main as adminCategorias
 from sql_app.database import SessionLocal, engine
 from sqlalchemy.orm import Session
-models.Base.metadata.create_all(bind=engine)
+from dependencies import get_db
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -32,25 +29,25 @@ async def index(request: Request):
 
 @app.get('/categorias/')
 def mostrar_categorias(db: Session = Depends(get_db)):
-    categorias = crud.obtener_categorias(db)
+    categoria = main.obtener_categorias(db=db)
     context = {
-        "categorias": categorias
+        "categorias": categoria
     }
     return context
 
 @app.post('/categorias/', response_model=schemas.Categoria)
 def crear_categoria(categoria:schemas.Categoria, db: Session = Depends(get_db)):
-    return crud.crear_categorias(categoria=categoria, db=db)
+    return adminCategorias.crear_categorias(categoria=categoria, db=db)
 
 
 @app.post('/eliminar_categorias/{categoria_id}', response_model=schemas.EliminarCategoria)
 def eliminar_categorias(categoria_id: int, db: Session = Depends(get_db)):
-    return crud.eliminar_categorias(categoria_id=categoria_id, db=db)
+    return adminCategorias.eliminar_categorias(categoria_id=categoria_id, db=db)
 
 
 @app.post('/actualizar_categoria/{categoria_id}', response_model=schemas.ActualizarCategoria)
 def actualizar_categoria(categoria_id: int, categoria_actualizada:schemas.ActualizarCategoria, db: Session = Depends(get_db)):
-    return crud.actualizar_categorias(categoria_id=categoria_id, categoria_actualizada=categoria_actualizada,  db=db)
+    return adminCategorias.actualizar_categorias(categoria_id=categoria_id, categoria_actualizada=categoria_actualizada,  db=db)
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(
@@ -58,7 +55,7 @@ async def crear_vendedor(
     pais:str,
     nombre:str,
     ciudad:str,
-    constraseña_encriptada:str,
+    contraseña_encriptada:str,
     db: Session = Depends(get_db)
 ):
     return crud.crear_vendedor(db=db,nombre=nombre,pais=pais,ciudad=ciudad,
