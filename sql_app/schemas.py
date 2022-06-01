@@ -38,8 +38,8 @@ class ProductoCreate(ProductoBase):
 
 
 class Producto(ProductoBase):
-    producto_id: int
-    vendedor_del_producto_id: int
+    producto_id: Optional[int]
+    vendedor_del_producto_id: Optional[int]
 
     class Config:
         orm_mode = True

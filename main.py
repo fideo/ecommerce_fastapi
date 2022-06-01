@@ -10,6 +10,7 @@ from routers.categorias import main as categorias
 from routers.productos import main as productos
 from routers.usuarios import main as usuarios
 from admin.routers.categorias import main as adminCategorias
+from admin.routers.productos import main as adminProductos
 from sql_app.database import SessionLocal, engine
 from sqlalchemy.orm import Session
 from dependencies import get_db
@@ -45,10 +46,13 @@ def mostrar_productos(db: Session = Depends(get_db)):
     }
     return context
 
-@app.post('/categorias/', response_model=schemas.Categoria)
+@app.post('/crear_categorias/', response_model=schemas.Categoria)
 def crear_categoria(categoria:schemas.Categoria, db: Session = Depends(get_db)):
     return adminCategorias.crear_categorias(categoria=categoria, db=db)
 
+@app.post('/crear_productos/', response_model=schemas.Producto)
+def crear_producto(producto:schemas.Producto, db: Session = Depends(get_db)):
+    return adminProductos.crear_producto(producto=producto, db=db)
 
 @app.post('/eliminar_categorias/{categoria_id}', response_model=schemas.EliminarCategoria)
 def eliminar_categorias(categoria_id: int, db: Session = Depends(get_db)):
