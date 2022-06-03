@@ -31,6 +31,8 @@ class ProductoBase(BaseModel):
     numero_de_productos_subidos: int
     precio_unitario_de_producto: int
     descripcion: Optional[str] = None
+    class Config:
+        orm_mode = True
 
 
 class ProductoCreate(ProductoBase):

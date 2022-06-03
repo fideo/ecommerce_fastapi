@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, Table
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, DateTime, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy 
 from .database import Base
@@ -96,9 +96,10 @@ class Producto(Base):
 
     producto_id = Column(Integer, primary_key=True, index=True)
     nombre_producto = Column(String,nullable=False)
-    fecha_de_publicacion = Column(Date)
+    fecha_de_publicacion = Column(DateTime)
     numero_de_productos_subidos = Column(Integer)
     precio_unitario_de_producto = Column(Integer)
+    descripcion = Column(String)
     vendedores = relationship(
             "Vendedor",
             secondary="vendedores_de_productos",
