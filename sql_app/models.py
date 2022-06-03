@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, DateTime, Table
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.associationproxy import association_proxy 
+from sqlalchemy.ext.associationproxy import association_proxy
 from .database import Base
 
 
@@ -9,10 +9,10 @@ vendedores_de_productos = Table('vendedores_de_productos', Base.metadata,
     Column('producto_id', ForeignKey('productos.producto_id'), primary_key=True)
 )
 
-ventas_de_productos = Table('ventas_de_productos', Base.metadata,
-    Column('ventas_id', ForeignKey('ventas.venta_id'), primary_key=True),
-    Column('producto_id', ForeignKey('productos.producto_id'), primary_key=True)
-)
+#ventas_de_productos = Table('ventas_de_productos', Base.metadata,
+#    Column('ventas_id', ForeignKey('ventas.venta_id'), primary_key=True),
+#    Column('producto_id', ForeignKey('productos.producto_id'), primary_key=True)
+#)
 
 categorias_de_productos = Table("categorias_de_productos", Base.metadata,
     Column("categoria_id", ForeignKey("categorias.categoria_id"), primary_key=True),
@@ -33,21 +33,14 @@ categorias_de_productos = Table("categorias_de_productos", Base.metadata,
 #                                attr="nombre_producto")
 #
 #
-#class VentaDeProducto(Base):
-#    __tablename__ = "ventas_de_productos"
-#    venta_id = Column(ForeignKey('ventas.venta_id'), primary_key=True)
-#    producto_id = Column(ForeignKey('productos.producto_id'), primary_key=True)
-#    precio_unitario = Column(Float)
-#    cantidad = Column(Integer)
-#    #blurb = Column(String, nullable=False)
-#    venta = relationship("Venta", back_populates="productos")
-#    producto = relationship("Producto", back_populates="ventas")
-#
-#    precio_total_de_venta = association_proxy(target_collection="venta",
-#                                attr="precio_total_de_venta")
-#    nombre_de_producto = association_proxy(target_collection="producto",
-#                                attr="nombre_producto")
-    
+class VentaDeProducto(Base):
+    __tablename__ = "ventas_de_productos"
+    venta_id = Column(ForeignKey('ventas.venta_id'),
+                         primary_key=True)
+    producto_id = Column(ForeignKey('productos.producto_id'),
+                            primary_key=True)
+    precio_unitario = Column(Float)
+    cantidad = Column(Integer)
 
 
 class Usuario(Base):
@@ -76,7 +69,7 @@ class Vendedor(Base):
         secondary="vendedores_de_productos",
         back_populates="vendedores"
     )
-   
+
 class Categoria(Base):
     __tablename__ = "categorias"
 
@@ -85,7 +78,7 @@ class Categoria(Base):
     descripcion = Column(String)
     esta_activo = Column(Boolean)
     productos = relationship(
-        "Producto", 
+        "Producto",
         secondary="categorias_de_productos",
         back_populates="categorias"
         )
@@ -104,10 +97,23 @@ class Producto(Base):
             "Vendedor",
             secondary="vendedores_de_productos",
             back_populates="productos")
-    ventas = relationship(
-            "Venta",
-            secondary="ventas_de_productos",
-            back_populates="productos")
+    @property
+    def ventas(self):
+        s = """
+            SELECT temp.* FROM (
+                SELECT
+                    ventas.*,
+                    ventas_de_productos.precio_unitario,
+                    ventas_de_productos.cantidad,
+                    ventas_de_productos.venta_id
+                FROM ventas INNER JOIN ventas_de_productos ON ventas.venta_id = ventas_de_productos.venta_id
+            ) AS temp
+            INNER JOIN productos ON temp.producto_id = productos.producto_id
+            WHERE productos.producto_id = :productoid
+            """
+        result = object_session(self).execute(s,params={"productoid":self.producto_id}).fetchall()
+        return result
+
     categorias = relationship(
             "Categoria",
             secondary = "categorias_de_productos",
@@ -120,10 +126,26 @@ class Venta(Base):
 
     venta_id = Column(Integer, primary_key=True, index=True)
     fecha_de_venta = Column(Date)
-    numero_de_productos_comprados = Column(Integer,nullable=False)
-    precio_total_de_venta = Column(Float)
+    #numero_de_productos_comprados = Column(Integer,nullable=False)
+    #precio_total_de_venta = Column(Float)
     #precio_total_de_venta = #agregar @aggregated(.....
-    productos = relationship(
-            "Producto",
-            secondary="ventas_de_productos",
-            back_populates="ventas")
+    #productos = relationship(
+    #        "Producto",
+    #        secondary="ventas_de_productos",
+    #        back_populates="ventas")
+    @property
+    def productos(self):
+        s = """
+            SELECT temp.* FROM (
+                SELECT
+                    productos.*,
+                    ventas_de_productos.precio_unitario,
+                    ventas_de_productos.cantidad,
+                    ventas_de_productos.producto_id
+                FROM productos INNER JOIN ventas_de_productos ON productos.producto_id = ventas_de_productos.producto_id
+            ) AS temp
+            INNER JOIN ventas ON temp.venta_id = ventas.venta_id
+            WHERE ventas.venta_id = :ventaid
+            """
+        result = object_session(self).execute(s,params={"ventaid":self.venta_id}).fetchall()
+        return result
