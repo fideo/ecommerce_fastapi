@@ -50,8 +50,8 @@ def mostrar_productos(db: Session = Depends(get_db)):
 def crear_categoria(categoria:schemas.Categoria, db: Session = Depends(get_db)):
     return adminCategorias.crear_categorias(categoria=categoria, db=db)
 
-@app.post('/crear_productos/', response_model=schemas.Producto)
-def crear_producto(producto:schemas.Producto, db: Session = Depends(get_db)):
+@app.post('/crear_productos/', response_model=schemas.ProductoBase)
+def crear_producto(producto:schemas.ProductoBase, db: Session = Depends(get_db)):
     return adminProductos.crear_producto(producto=producto, db=db)
 
 @app.post('/eliminar_categorias/{categoria_id}', response_model=schemas.EliminarCategoria)
@@ -85,7 +85,7 @@ async def crear_vendedor(
     return crud.crear_vendedor(db=db,nombre=nombre,pais=pais,ciudad=ciudad,
                             correo_de_vendedor=correo_de_vendedor,contraseña_encriptada=contraseña_encriptada)
 
-@app.post("/crear_producto",response_model=schemas.ProductoCreate)
+@app.post("/crear_producto/",response_model=schemas.ProductoBase)
 async def crear_producto_nuevo(
     vendedor_id: int,
     producto:schemas.ProductoCreate,

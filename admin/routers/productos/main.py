@@ -8,13 +8,12 @@ import datetime
 router = APIRouter(prefix="/productos", tags=["productos"])
 
 @router.get("/", tags=["productos"], response_model=List[schemas.ProductoCreate])
-def crear_producto(producto:schemas.ProductoCreate, vendedor_id:int, db: Session = Depends(get_db)):
+def crear_producto(producto:schemas.ProductoCreate, db: Session = Depends(get_db)):
     db_producto = models.Producto(nombre_producto=producto.nombre_producto,
                                 fecha_de_publicacion=datetime.datetime.now(),
                                 descripcion=producto.descripcion,
                                 numero_de_productos_subidos=producto.numero_de_productos_subidos,
                                 precio_unitario_de_producto =producto.precio_unitario_de_producto,
-                                vendedor_del_producto=vendedor_id,
                                 )
     db.add(db_producto)
     db.commit()
