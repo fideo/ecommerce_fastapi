@@ -6,17 +6,16 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sql_app import crud,models,schemas
+from routers.categorias import main as categorias
+from routers.productos import main as productos
+from routers.usuarios import main as usuarios
+from admin.routers.categorias import main as adminCategorias
+from admin.routers.productos import main as adminProductos
 from sql_app.database import SessionLocal, engine
 from sqlalchemy.orm import Session
+from dependencies import get_db
 
 models.Base.metadata.create_all(bind=engine)
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 app = FastAPI()
 
@@ -33,16 +32,54 @@ async def index(request: Request):
 
 @app.get('/categorias/')
 def mostrar_categorias(db: Session = Depends(get_db)):
-    categorias = crud.obtener_categorias(db)
+    categoria = categorias.obtener_categorias(db=db)
     context = {
-            "categorias": categorias
-        }
+        "categorias": categoria
+    }
     return context
+
+@app.get('/productos/')
+def mostrar_productos(db: Session = Depends(get_db)):
+    producto = productos.obtener_productos(db=db)
+    context = {
+        "productos": producto
+    }
+    return context
+
+@app.post('/crear_categorias/', response_model=schemas.Categoria)
+def crear_categoria(categoria:schemas.Categoria, db: Session = Depends(get_db)):
+    return adminCategorias.crear_categorias(categoria=categoria, db=db)
+
+@app.post('/crear_productos/', response_model=schemas.Producto)
+def crear_producto(producto:schemas.Producto, db: Session = Depends(get_db)):
+    return adminProductos.crear_producto(producto=producto, db=db)
+
+@app.post('/eliminar_categorias/{categoria_id}', response_model=schemas.EliminarCategoria)
+def eliminar_categorias(categoria_id: int, db: Session = Depends(get_db)):
+    return adminCategorias.eliminar_categorias(categoria_id=categoria_id, db=db)
+
+
+@app.post('/actualizar_categoria/{categoria_id}', response_model=schemas.ActualizarCategoria)
+def actualizar_categoria(categoria_id: int, categoria_actualizada:schemas.ActualizarCategoria, db: Session = Depends(get_db)):
+    return adminCategorias.actualizar_categorias(categoria_id=categoria_id, categoria_actualizada=categoria_actualizada,  db=db)
+
+
+@app.get('/usuarios/')
+def mostrar_usuarios(db: Session = Depends(get_db)):
+    usuario = usuarios.obtener_usuarios(db=db)
+    context = {
+        "categorias": usuario
+    }
+    return context
+
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(
-    correo_de_vendedor:str,pais:str,nombre:str,
-    ciudad:str,constraseña_encriptada:str,
+    correo_de_vendedor:str,
+    pais:str,
+    nombre:str,
+    ciudad:str,
+    contraseña_encriptada:str,
     db: Session = Depends(get_db)
 ):
     return crud.crear_vendedor(db=db,nombre=nombre,pais=pais,ciudad=ciudad,

@@ -3,13 +3,7 @@ from typing import Any, List, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-# Inicio schema de Usuario
-class UsuarioBase(BaseModel):
-    correo_de_vendedor: str
 
-
-class UsuarioCreate(UsuarioBase):
-    password: str
 
 
 class VentaBase(BaseModel):
@@ -28,7 +22,7 @@ class VentaCreate(VentaBase):
 
     class Config:
         orm_mode = True
-# Fin schema de Usuario
+
 
 # Inicio schema de Producto
 class ProductoBase(BaseModel):
@@ -44,7 +38,8 @@ class ProductoCreate(ProductoBase):
 
 
 class Producto(ProductoBase):
-    producto_id: int
+    producto_id: Optional[int]
+    vendedor_del_producto_id: Optional[int]
 
     class Config:
         orm_mode = True
@@ -69,6 +64,8 @@ class ActualizarCategoria(BaseModel):
 class EliminarCategoria(BaseModel):
     categoria_id: int
     mensaje: str
+    class Config:
+        orm_mode = True
 
 # Fin schema de Categoría
 
@@ -106,14 +103,19 @@ class Vendedor(VendedorBase):
     class Config:
         orm_mode = True
 
+# Inicio schema de Usuario
+class UsuarioBase(BaseModel):
+    correo_de_vendedor: str
+class UsuarioCreate(UsuarioBase):
+    password: str
 
 class Usuario(UsuarioBase):
     usuario_id: int
     esta_activo: bool
-
     class Config:
         orm_mode = True
 
+# Fin schema de Usuario
 
 class Producto(ProductoBase):
     producto_id: int
