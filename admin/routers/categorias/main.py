@@ -4,9 +4,9 @@ from sql_app import models, schemas
 from dependencies import get_db
 from fastapi import APIRouter, Depends
 
-router = APIRouter(prefix="/categorias", tags=["categorias"])
+router = APIRouter(prefix="/categorias")
 
-@router.get("/", tags=["categorias"], response_model=List[schemas.Categoria])
+@router.post("/crear_categorias", tags=["categorias"])
 def crear_categorias(categoria:schemas.Categoria, db: Session = Depends(get_db)):
     categoria = models.Categoria(
         nombre_categoria = categoria.nombre_categoria,
@@ -18,10 +18,10 @@ def crear_categorias(categoria:schemas.Categoria, db: Session = Depends(get_db))
     db.refresh(categoria)
     return categoria
 
-@router.get("/{categoria_id}", tags=["categorias"], response_model=List[schemas.ActualizarCategoria])
+@router.post("/actualizar_categorias/{categoria_id}")
 def actualizar_categorias(categoria_id:int, categoria_actualizada:schemas.ActualizarCategoria, db: Session = Depends(get_db)):
     categoria = db.query(models.Categoria).filter_by(categoria_id=categoria_id).first()
-    print(categoria_id)
+    #print(categoria_id)
     categoria.nombre_categoria = categoria_actualizada.nombre_categoria
     categoria.descripcion = categoria_actualizada.descripcion
     categoria.esta_activo = categoria_actualizada.esta_activo
@@ -29,7 +29,7 @@ def actualizar_categorias(categoria_id:int, categoria_actualizada:schemas.Actual
     db.refresh(categoria)
     return categoria
 
-@router.get("/{categoria_id}", tags=["categorias"], response_model=List[schemas.EliminarCategoria])
+@router.post("/eliminar_categorias/{categoria_id}")
 def eliminar_categorias(categoria_id:int, db: Session = Depends(get_db)):
     categoria = db.query(models.Categoria).filter_by(categoria_id=categoria_id).first()
     db.delete(categoria)
