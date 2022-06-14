@@ -24,16 +24,19 @@ with Session(bind=engine) as session:
     producto1 = Producto(nombre_producto = "mayonesa australiana cream de la cream",
                     fecha_de_publicacion = datetime.datetime.now(),
                     numero_de_productos_subidos = 12,
+                    link_de_imagen="random_link",
                     precio_unitario_de_producto =1500)
     #
     producto2 = Producto(nombre_producto = "ketchup australiana cream de la cream",
                     fecha_de_publicacion = datetime.datetime.now(),
                     numero_de_productos_subidos = 15,
+                    link_de_imagen="random_link",
                     precio_unitario_de_producto =1000)
 
     producto3 = Producto(nombre_producto = "mostasa australiana cream de la cream",
                     fecha_de_publicacion = datetime.datetime.now(),
                     numero_de_productos_subidos = 8,
+                    link_de_imagen="random_link",
                     precio_unitario_de_producto =2000)
     venta1 = Venta(fecha_de_venta=datetime.datetime.fromisoformat("2022-06-18"))
     venta2 = Venta(fecha_de_venta=datetime.datetime.fromisoformat("2022-06-21"))

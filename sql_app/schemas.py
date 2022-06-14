@@ -29,6 +29,7 @@ class ProductoBase(BaseModel):
     nombre_producto: str
     fecha_de_publicacion: datetime
     numero_de_productos_subidos: int
+    link_de_imagen: str
     precio_unitario_de_producto: int
     descripcion: Optional[str] = None
     class Config:
@@ -41,7 +42,6 @@ class ProductoCreate(ProductoBase):
 
 class Producto(ProductoBase):
     producto_id: Optional[int]
-    vendedor_del_producto_id: Optional[int]
 
     class Config:
         orm_mode = True
@@ -72,16 +72,6 @@ class EliminarCategoria(BaseModel):
 # Fin schema de Categoría
 
 # Inicio schema de Vendedor
-class VendedorBase(BaseModel):
-    correo_de_vendedor: str
-    pais: str
-    nombre: str
-    ciudad: str
-
-
-class VendedorCreate(VendedorBase):
-    constraseña_encriptada: str
-
 
 class VentaBase(BaseModel):
     fecha_venta: Date
@@ -97,17 +87,10 @@ class VentaBase(BaseModel):
 
 # Inicio schema de Venta
 
-class Vendedor(VendedorBase):
-    vendedor_id: int
-    esta_activo: bool
-    productos: List[ProductoBase] = []
-
-    class Config:
-        orm_mode = True
 
 # Inicio schema de Usuario
 class UsuarioBase(BaseModel):
-    correo_de_vendedor: str
+    correo: str
 class UsuarioCreate(UsuarioBase):
     password: str
 
@@ -121,7 +104,7 @@ class Usuario(UsuarioBase):
 
 class Producto(ProductoBase):
     producto_id: int
-    vendedores : List[VendedorBase] = []
+    vendedores : List[UsuarioBase] = []
     
     class Config:
         orm_mode = True
@@ -129,7 +112,7 @@ class Producto(ProductoBase):
 
 class Venta(VentaBase):
     venta_id: int
-    productos: List[VendedorBase] = []
+    productos: List[ProductoBase] = []
 
     class Config:
         orm_mode = True
