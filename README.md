@@ -44,7 +44,62 @@ Repo del ecommerce que desarrollaremos con FastAPI en #hagamos-equipo de Python 
 ### Arbol del proyecto
 
 - dependencies.py
-  - ecommerce_fastapi.db
-  - __init__.py
-
-├── dependencies.py\n├── ecommerce_fastapi.db\n├── __init__.py\n├── main.py\n├── models\n│\xa0\xa0 ├── categoria.py\n│\xa0\xa0 ├── producto.py\n│\xa0\xa0 ├── __pycache__\n│\xa0\xa0 │\xa0\xa0 ├── categoria.cpython-310.pyc\n│\xa0\xa0 │\xa0\xa0 ├── producto.cpython-310.pyc\n│\xa0\xa0 │\xa0\xa0 ├── usuario.cpython-310.pyc\n│\xa0\xa0 │\xa0\xa0 └── venta.cpython-310.pyc\n│\xa0\xa0 ├── usuario.py\n│\xa0\xa0 └── venta.py\n├── __pycache__\n│\xa0\xa0 ├── dependencies.cpython-310.pyc\n│\xa0\xa0 └── main.cpython-310.pyc\n├── README.md\n├── requirements.txt\n├── routers\n│\xa0\xa0 ├── categorias\n│\xa0\xa0 │\xa0\xa0 ├── __init__.py\n│\xa0\xa0 │\xa0\xa0 ├── main.py\n│\xa0\xa0 │\xa0\xa0 └── __pycache__\n│\xa0\xa0 │\xa0\xa0     ├── __init__.cpython-310.pyc\n│\xa0\xa0 │\xa0\xa0     └── main.cpython-310.pyc\n│\xa0\xa0 ├── __init__.py\n│\xa0\xa0 ├── productos\n│\xa0\xa0 │\xa0\xa0 ├── __init__.py\n│\xa0\xa0 │\xa0\xa0 ├── main.py\n│\xa0\xa0 │\xa0\xa0 └── __pycache__\n│\xa0\xa0 │\xa0\xa0     ├── __init__.cpython-310.pyc\n│\xa0\xa0 │\xa0\xa0     └── main.cpython-310.pyc\n│\xa0\xa0 ├── __pycache__\n│\xa0\xa0 │\xa0\xa0 └── __init__.cpython-310.pyc\n│\xa0\xa0 ├── usuarios\n│\xa0\xa0 │\xa0\xa0 ├── __init__.py\n│\xa0\xa0 │\xa0\xa0 ├── main.py\n│\xa0\xa0 │\xa0\xa0 └── __pycache__\n│\xa0\xa0 │\xa0\xa0     ├── __init__.cpython-310.pyc\n│\xa0\xa0 │\xa0\xa0     └── main.cpython-310.pyc\n│\xa0\xa0 └── ventas.py\n├── schemas\n│\xa0\xa0 ├── categorias.py\n│\xa0\xa0 ├── productos.py\n│\xa0\xa0 ├── __pycache__\n│\xa0\xa0 │\xa0\xa0 ├── categorias.cpython-310.pyc\n│\xa0\xa0 │\xa0\xa0 └── productos.cpython-310.pyc\n│\xa0\xa0 ├── usuarios.py\n│\xa0\xa0 └── venta.py\n├── services\n│\xa0\xa0 ├── categorias\n│\xa0\xa0 │\xa0\xa0 ├── main.py\n│\xa0\xa0 │\xa0\xa0 └── __pycache__\n│\xa0\xa0 │\xa0\xa0     └── main.cpython-310.pyc\n│\xa0\xa0 ├── __init__.py\n│\xa0\xa0 ├── productos\n│\xa0\xa0 │\xa0\xa0 ├── main.py\n│\xa0\xa0 │\xa0\xa0 └── __pycache__\n│\xa0\xa0 │\xa0\xa0     └── main.cpython-310.pyc\n│\xa0\xa0 ├── __pycache__\n│\xa0\xa0 │\xa0\xa0 └── __init__.cpython-310.pyc\n│\xa0\xa0 └── ventas.py\n├── sql_app\n│\xa0\xa0 ├── database.py\n│\xa0\xa0 └── __pycache__\n│\xa0\xa0     └── database.cpython-310.pyc\n├── static\n│\xa0\xa0 ├── css\n│\xa0\xa0 │\xa0\xa0 └── styles.css\n│\xa0\xa0 ├── images\n│\xa0\xa0 │\xa0\xa0 └── favicon.ico\n│\xa0\xa0 └── js\n│\xa0\xa0     └── index.js\n├── templates\n│\xa0\xa0 ├── categorias.html\n│\xa0\xa0 ├── contenido.html\n│\xa0\xa0 ├── index.html\n│\xa0\xa0 ├── inicio_sesion.html\n│\xa0\xa0 ├── navegacion.html\n│\xa0\xa0 ├── piedepagina.html\n│\xa0\xa0 └── productos.html\n└── test_db.py
+- ecommerce_fastapi.db
+- __init__.py
+- main.py
+- models
+  - categoria.py
+  - producto.py
+  - __pycache__
+    - categoria.cpython-310.pyc
+    - producto.cpython-310.pyc
+    - usuario.cpython-310.pyc
+    - venta.cpython-310.pyc
+  - usuario.py
+  - venta.py
+  - __pycache__
+    - dependencies.cpython-310.pyc
+    - main.cpython-310.pyc
+- README.md
+- requirements.txt
+- routers
+  - categorias
+    - __init__.py
+    - main.py
+    - productos
+      - __init__.py
+      - main.py
+    - usuarios
+      - __init__.py
+      - main.py 
+    - ventas.py
+- schemas
+  - categorias.py
+  - productos.py
+  - usuarios.py
+  - venta.py
+- services
+  - categorias
+    - main.py
+    - __init__.py
+  - productos
+    - main.py
+  - ventas.py
+- sql_app
+  - database.py
+- static
+  - css
+    - styles.css
+  - images
+    - favicon.ico
+  - js
+    - index.js
+- templates
+  - categorias.html
+  - contenido.html
+  - index.html
+  - inicio_sesion.html
+  - navegacion.html
+  - piedepagina.html
+  - productos.html
+- test_db.py
