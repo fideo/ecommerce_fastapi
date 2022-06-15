@@ -1,5 +1,6 @@
 axios.get("/categorias/").then(r => {
   r.data.categorias.forEach(categoria => {
+    console.log(categoria)
     const a = document.createElement("a")
     a.innerHTML = categoria.nombre_categoria
     a.href = "/categoria/" + categoria.nombre_categoria

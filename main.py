@@ -5,14 +5,14 @@ from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sql_app import models,schemas
-from sql_app.database import SessionLocal, engine
+from sql_app.database import SessionLocal,Base, engine
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from routers.productos import main as productos_router
 from routers.categorias import main as categorias_router
+from routers.usuarios import main as usuarios_router
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -31,4 +31,6 @@ templates = Jinja2Templates(directory="templates")
 app.include_router(productos_router.router)
 
 app.include_router(categorias_router.router)
+
+app.include_router(usuarios_router.router)
 

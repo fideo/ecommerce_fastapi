@@ -1,8 +1,10 @@
 import datetime
 from sqlalchemy.orm import Session
 from sql_app.database import engine
-from sql_app.models import Usuario, Vendedor, Producto, Categoria,Venta,VentaDeProducto
-
+from models.producto import Producto, VentaDeProducto
+from models.categoria import Categoria
+from models.venta import Venta
+from models.usuario import Usuario
 with Session(bind=engine) as session:
 
     #usuario = Usuario(correo_de_usuario="admin@ecommerce.com",
@@ -51,9 +53,9 @@ with Session(bind=engine) as session:
     ventadeproducto2 = VentaDeProducto(venta_id=venta2.venta_id,producto_id=producto2.producto_id,precio_unitario=15.4,cantidad=30)
     ventadeproducto3 = VentaDeProducto(venta_id=venta3.venta_id,producto_id=producto3.producto_id,precio_unitario=19.4,cantidad=25)
     #
-    #categoria1 = Categoria(nombre_categoria = "aderezos", descripcion = "condimentos para la comida", esta_activo = True)
-    #categoria2 = Categoria(nombre_categoria = "bebidas", descripcion = "todo tipos de bebidas", esta_activo = True)
-    #categoria3 = Categoria(nombre_categoria = "electrodomésticos", descripcion = "articulos para el hogar", esta_activo = True)
+    categoria1 = Categoria(nombre_categoria = "aderezos", descripcion = "condimentos para la comida", esta_activo = True)
+    categoria2 = Categoria(nombre_categoria = "bebidas", descripcion = "todo tipos de bebidas", esta_activo = True)
+    categoria3 = Categoria(nombre_categoria = "electrodomésticos", descripcion = "articulos para el hogar", esta_activo = True)
     #
     #producto1.vendedores = [vendedor1]
     #producto2.vendedores = [vendedor2]
@@ -62,5 +64,5 @@ with Session(bind=engine) as session:
     #producto2.categorias = [categoria1]
     #producto3.categorias = [categoria1]
     #
-    session.add_all([ventadeproducto1,ventadeproducto2,ventadeproducto3])
+    session.add_all([ventadeproducto1,ventadeproducto2,ventadeproducto3,categoria1,categoria2,categoria3])
     session.commit()
