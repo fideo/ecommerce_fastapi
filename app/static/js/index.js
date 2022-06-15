@@ -19,11 +19,11 @@ axios.get("/productos/").then(r => {
     img.className = "object-cover w-full rounded-md h-72 xl:h-80"
     document.getElementById("listaProductos").appendChild(div).appendChild(img)
     const h4 = document.createElement("h4")
-    h4.className = "mt-2 text-lg font-medium text-gray-700 dark:text-gray-200"
+    h4.className = "mt-2 text-lg text-gray-900"
     h4.innerHTML = producto.nombre_producto
     document.getElementById("listaProductos").appendChild(div).appendChild(h4)
     const p = document.createElement("p")
-    p.className = "text-blue-500"
+    p.className = "text-blue-700 font-medium"
     p.innerHTML = producto.precio_unitario_de_producto
     document.getElementById("listaProductos").appendChild(div).appendChild(p)
     const button = document.createElement("button")
