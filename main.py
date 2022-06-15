@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from sql_app import crud,models,schemas
 from routers.categorias import main as categorias
 from routers.productos import main as productos
-from routers.usuarios import main as usuarios
+from routers.usuarios import usuarios
 from admin.routers.categorias import main as adminCategorias
 from admin.routers.productos import main as adminProductos
 from sql_app.database import SessionLocal, engine
@@ -18,6 +18,8 @@ from dependencies import get_db
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+#agregando las rutas de usuarios
+app.include_router(usuarios.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
