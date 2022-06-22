@@ -44,14 +44,15 @@ class VentaDeProducto(Base):
 
 
 class Usuario(Base):
-    __tablename__ = "usuarios"
+    __tablename__ = "usuario"
 
-    usuario_id = Column(Integer, primary_key=True, index=True)
-    correo_de_usuario = Column(String, unique=True)
-    contraseña_encriptada = Column(String)
-    pais = Column(String)
-    esta_activo = Column(Boolean)
-    ciudad = Column(String)
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True, default=None)
+    #email = Column(String, unique=True, index=True)
+    password = Column(String)
+    esta_activo = Column(Boolean, default=True)
+#    pais = Column(String)
+#    ciudad = Column(String)
 
 
 class Vendedor(Base):

@@ -107,13 +107,16 @@ class Vendedor(VendedorBase):
 
 # Inicio schema de Usuario
 class UsuarioBase(BaseModel):
-    correo_de_vendedor: str
+    
+    username: str
+    
 class UsuarioCreate(UsuarioBase):
     password: str
 
 class Usuario(UsuarioBase):
-    usuario_id: int
+    id: int
     esta_activo: bool
+    
     class Config:
         orm_mode = True
 
