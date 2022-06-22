@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from sql_app import crud,models,schemas
 from routers.categorias import main as categorias
 from routers.productos import main as productos
-from routers.usuarios import usuarios
+from routers.usuarios import testusuarios
 from admin.routers.categorias import main as adminCategorias
 from admin.routers.productos import main as adminProductos
 from sql_app.database import SessionLocal, engine
@@ -19,7 +19,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 #agregando las rutas de usuarios
-app.include_router(usuarios.router)
+app.include_router(testusuarios.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -64,6 +64,7 @@ def eliminar_categorias(categoria_id: int, db: Session = Depends(get_db)):
 @app.post('/actualizar_categoria/{categoria_id}', response_model=schemas.ActualizarCategoria)
 def actualizar_categoria(categoria_id: int, categoria_actualizada:schemas.ActualizarCategoria, db: Session = Depends(get_db)):
     return adminCategorias.actualizar_categorias(categoria_id=categoria_id, categoria_actualizada=categoria_actualizada,  db=db)
+
 
 @app.post("/crear_vendedor",response_model=schemas.Vendedor)
 async def crear_vendedor(

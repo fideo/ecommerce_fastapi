@@ -1,10 +1,34 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
 import datetime
+import hashlib
 
+def get_password_hashed(password):
+    return hashlib.sha256(bytes(password, 'utf-8')).hexdigest()
 
-def crear_usuario():
-    pass
+def get_user(db: Session, user_id: int):
+    return db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+
+#def get_user_by_email(db: Session, email: str):
+    #return db.query(models.Usuario).filter(models.Usuario.email == email).first()
+
+def get_user_by_username(db: Session,username: str):
+    print(username)
+    return db.query(models.Usuario).filter(models.Usuario.username == username).first()
+  
+def get_users(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Usuario).offset(skip).limit(limit).all()
+
+def create_user(db: Session,  user: schemas.UsuarioCreate): # pendienre arreglar conflito en los atributos username y email de la base de datos
+    hashed_password = get_password_hashed(user.password)
+    db_user = models.Usuario(username=user.username, password=hashed_password) 
+    db.add(db_user) 
+    db.commit() 
+    db.refresh(db_user)
+    return db_user
+
+#def crear_usuario():
+#    pass
 
 
 def crear_vendedor(db: Session,
@@ -58,36 +82,3 @@ def buscar_producto(db: Session, palabra_clave:str):
 
 def subir_producto_a_carrito():
     pass
-
-# def obtener_categorias(db:Session):
-#     categoria = db.query(models.Categoria).all()
-#     return categoria
-
-# def crear_categorias(categoria:schemas.Categoria, db:Session):
-#     categoria = models.Categoria(
-#         nombre_categoria = categoria.nombre_categoria,
-#         descripcion = categoria.descripcion,
-#         esta_activo = categoria.esta_activo
-#     )
-#     db.add(categoria)
-#     db.commit()
-#     db.refresh(categoria)
-#     return categoria
-
-
-# def actualizar_categorias(categoria_id:int, categoria_actualizada:schemas.ActualizarCategoria, db:Session):
-#     categoria = db.query(models.Categoria).filter_by(categoria_id=categoria_id).first()
-#     print(categoria_id)
-#     categoria.nombre_categoria = categoria_actualizada.nombre_categoria
-#     categoria.descripcion = categoria_actualizada.descripcion
-#     categoria.esta_activo = categoria_actualizada.esta_activo
-#     db.commit()
-#     db.refresh(categoria)
-#     return categoria
-
-# def eliminar_categorias(categoria_id:int, db:Session):
-#     categoria = db.query(models.Categoria).filter_by(categoria_id=categoria_id).first()
-#     db.delete(categoria)
-#     db.commit()
-#     mensaje= schemas.EliminarCategoria(mensaje="La categoria "+ str(categoria_id) +" ha sido eliminada correctamente",categoria_id=categoria_id)
-#     return mensaje
