@@ -19,11 +19,11 @@ def buscar_producto(palabra_clave:str, db: Session = Depends(get_db)):
     return productos_services.buscar_producto(palabra_clave=palabra_clave, db=db)
 
 #creamos un endpoint que se conecte a la funcion que crea un producto en el services
-@router.get("/crear/", tags=["productos"], response_model=productos_schemas.ProductoCreate)
+@router.post("/crear/", tags=["productos"], response_model=productos_schemas.ProductoCreate)
 def crear_producto(producto: productos_schemas.ProductoCreate,db: Session = Depends(get_db)):
     return productos_services.crear_producto(db=db,producto=producto)
 
 #creamos un endpoint que se conecte a la funcion que elimina un producto en el services
-@router.get("/eliminar/{producto_id}", tags=["productos"], response_model=productos_schemas.Producto) 
+@router.post("/eliminar/{producto_id}", tags=["productos"], response_model=productos_schemas.Producto) 
 def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
     return productos_services.eliminar_producto(db=db, producto_id=producto_id)

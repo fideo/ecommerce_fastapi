@@ -2,7 +2,7 @@
 from models.producto import Producto
 from schemas import productos as productos_schemas
 from sqlalchemy.orm import Session
-
+import datetime
 
 #funcion que retorna todos los productos
 def obtener_productos(db: Session):

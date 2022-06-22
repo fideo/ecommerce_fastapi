@@ -12,11 +12,10 @@ def obtener_categorias(db: Session = Depends(get_db)):
     return categoria
 
 
-def crear_categorias(categoria:categorias_schemas.Categoria, db: Session = Depends(get_db)):
+def crear_categorias(categoria:categorias_schemas.CategoriaCreate, db: Session = Depends(get_db)):
     categoria = Categoria(
         nombre_categoria = categoria.nombre_categoria,
-        descripcion = categoria.descripcion,
-        esta_activo = categoria.esta_activo
+        descripcion = categoria.descripcion
     )
     db.add(categoria)
     db.commit()

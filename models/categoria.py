@@ -2,7 +2,6 @@ from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from sql_app.database import Base
-#from .producto import Producto
 
 class Categoria(Base):
     __tablename__ = "categorias"
@@ -10,9 +9,10 @@ class Categoria(Base):
     categoria_id = Column(Integer, primary_key=True, index=True)
     nombre_categoria = Column(String, unique=True)
     descripcion = Column(String)
-    esta_activo = Column(Boolean)
+    #esta_activo = Column(Boolean)
     productos = relationship(
         "Producto",
         secondary="categorias_de_productos",
         back_populates="categorias"
         )
+
