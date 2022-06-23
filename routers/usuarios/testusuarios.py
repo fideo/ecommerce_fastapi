@@ -9,7 +9,9 @@ import hashlib
 
 from dependencies import get_db
 from sqlalchemy.orm import Session
-from sql_app import models, schemas, crud
+from models import usuario as usermod
+from services.usuario import crud
+from schemas import usuarios as userschem
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -31,9 +33,9 @@ router = APIRouter(prefix="/usuario", tags=["usuario"])
 
 def verify_password(plain_password, hashed_password):
     return hashlib.sha256(bytes(plain_password, 'utf-8')).hexdigest() == hashed_password
- 
- def get_user(db: Session, user_id: int):
-    return db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+
+def get_user(db: Session, user_id: int):
+     return db.query(usermod.Usuario).filter(usermod.Usuario.id == user_id).first()
 
 
 def authenticate_user(db: Session, username: str, password: str):
@@ -76,7 +78,7 @@ async def get_current_user(db : Session = Depends(get_db), token: str = Depends(
     return user
 
 
-async def get_current_active_user(current_user: schemas.Usuario = Depends(get_current_user)):
+async def get_current_active_user(current_user: userschem.Usuario = Depends(get_current_user)):
     if not current_user.esta_activo:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -97,23 +99,23 @@ def login_for_access_token(db : Session = Depends(get_db), form_data: OAuth2Pass
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.post("/users/", response_model=schemas.Usuario)
-def create_user(user: schemas.UsuarioCreate, db: Session = Depends(get_db)):
+@router.post("/users/", response_model=userschem.Usuario)
+def create_user(user: userschem.UsuarioCreate, db: Session = Depends(get_db)):
      db_user = crud.get_user_by_username(db, username=user.username)
      if db_user:
          raise HTTPException(status_code=400, detail="Email or Username already registered") 
      return crud.create_user(db=db, user=user) 
 
-@router.get("/users/", response_model=List[schemas.Usuario]) 
+@router.get("/users/", response_model=List[userschem.Usuario]) 
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit) 
     return users
 
-@router.get("/users/me/", response_model=schemas.Usuario)
-async def read_users_me(current_user: schemas.Usuario = Depends(get_current_active_user)):
+@router.get("/users/me/", response_model=userschem.Usuario)
+async def read_users_me(current_user: userschem.Usuario = Depends(get_current_active_user)):
     return current_user
 
-@router.get("/users/{user_id}", response_model=schemas.Usuario)
+@router.get("/users/{user_id}", response_model=userschem.Usuario)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id) 
     if db_user is None:

@@ -5,17 +5,17 @@ from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sql_app import crud,models,schemas
+from sql_app.database import Base, SessionLocal, engine
+from sql_app import models, schemas, crud
 from routers.categorias import main as categorias
 from routers.productos import main as productos
 from routers.usuarios import testusuarios
-from admin.routers.categorias import main as adminCategorias
-from admin.routers.productos import main as adminProductos
-from sql_app.database import SessionLocal, engine
+#from admin.routers.categorias import main as adminCategorias
+#from admin.routers.productos import main as adminProductos
 from sqlalchemy.orm import Session
 from dependencies import get_db
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 #agregando las rutas de usuarios

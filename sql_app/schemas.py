@@ -106,19 +106,7 @@ class Vendedor(VendedorBase):
         orm_mode = True
 
 # Inicio schema de Usuario
-class UsuarioBase(BaseModel):
-    
-    username: str
-    
-class UsuarioCreate(UsuarioBase):
-    password: str
 
-class Usuario(UsuarioBase):
-    id: int
-    esta_activo: bool
-    
-    class Config:
-        orm_mode = True
 
 # Fin schema de Usuario
 

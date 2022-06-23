@@ -42,19 +42,6 @@ class VentaDeProducto(Base):
     precio_unitario = Column(Float)
     cantidad = Column(Integer)
 
-
-class Usuario(Base):
-    __tablename__ = "usuario"
-
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True, default=None)
-    #email = Column(String, unique=True, index=True)
-    password = Column(String)
-    esta_activo = Column(Boolean, default=True)
-#    pais = Column(String)
-#    ciudad = Column(String)
-
-
 class Vendedor(Base):
     __tablename__ = "vendedores"
 

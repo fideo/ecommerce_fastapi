@@ -1,6 +1,6 @@
 from typing import List
 from sqlalchemy.orm import Session
-from ..sql_app import schemas, models
+from sql_app import schemas, models
 
 
 class ServicioVentas:
