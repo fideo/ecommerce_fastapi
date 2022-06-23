@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from dependencies import get_db
+from sql_app.database import SessionLocal,Base, engine
 from routers.productos import main as productos_router
 from routers.categorias import main as categorias_router
 from routers.usuarios import main as usuarios_router
