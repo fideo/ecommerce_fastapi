@@ -15,8 +15,6 @@ from routers.usuarios import main as usuarios_router
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-#agregando las rutas de usuarios
-app.include_router(usuarios.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
