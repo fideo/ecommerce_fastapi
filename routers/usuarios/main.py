@@ -34,16 +34,16 @@ def crear_usuario(usuario: usuarios_schemas.UsuarioCreate, db: Session = Depends
      return usuarios_services.crear_usuario(db=db, user=usuario) 
 
 @router.get("/users/", response_model=usuarios_schemas.Usuario) 
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def leer_usuarios(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = usuarios_services.obtener_varios_usuarios(db, skip=skip, limit=limit) 
     return users
 
 @router.get("/users/me/", response_model=usuarios_schemas.Usuario)
-async def read_users_me(current_user: usuarios_schemas.Usuario = Depends(usuarios_services.obtener_usuario_activo_actual)):
+async def leer_mis_usuarios(current_user: usuarios_schemas.Usuario = Depends(usuarios_services.obtener_usuario_activo_actual)):
     return current_user
 
 @router.get("/users/{usuario_id}", response_model=usuarios_schemas.Usuario)
-def read_user(usuario_id: int, db: Session = Depends(get_db)):
+def leer_un_usuario(usuario_id: int, db: Session = Depends(get_db)):
     db_user = usuarios_services.obtener_usuario(db, usuario_id=usuario_id) 
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found") 
