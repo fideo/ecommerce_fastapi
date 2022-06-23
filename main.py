@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+<<<<<<< HEAD
 from sql_app import crud,models,schemas
 from routers.categorias import main as categorias
 from routers.productos import main as productos
@@ -12,10 +13,16 @@ from routers.usuarios import usuarios
 from admin.routers.categorias import main as adminCategorias
 from admin.routers.productos import main as adminProductos
 from sql_app.database import SessionLocal, engine
+=======
+from sql_app.database import SessionLocal,Base, engine
+>>>>>>> her204-test-branch
 from sqlalchemy.orm import Session
 from dependencies import get_db
+from routers.productos import main as productos_router
+from routers.categorias import main as categorias_router
+from routers.usuarios import main as usuarios_router
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 #agregando las rutas de usuarios
@@ -23,7 +30,6 @@ app.include_router(usuarios.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-templates = Jinja2Templates(directory="templates")
 
 @app.get('/')
 async def index(request: Request):
@@ -32,30 +38,15 @@ async def index(request: Request):
   }
   return templates.TemplateResponse("index.html", context)
 
-@app.get('/categorias/')
-def mostrar_categorias(db: Session = Depends(get_db)):
-    categoria = categorias.obtener_categorias(db=db)
-    context = {
-        "categorias": categoria
-    }
-    return context
+templates = Jinja2Templates(directory="templates")
 
-@app.get('/productos/')
-def mostrar_productos(db: Session = Depends(get_db)):
-    producto = productos.obtener_productos(db=db)
-    context = {
-        "productos": producto
-    }
-    return context
+app.include_router(productos_router.router)
 
-@app.post('/crear_categorias/', response_model=schemas.Categoria)
-def crear_categoria(categoria:schemas.Categoria, db: Session = Depends(get_db)):
-    return adminCategorias.crear_categorias(categoria=categoria, db=db)
+app.include_router(categorias_router.router)
 
-@app.post('/crear_productos/', response_model=schemas.ProductoBase)
-def crear_producto(producto:schemas.ProductoBase, db: Session = Depends(get_db)):
-    return adminProductos.crear_producto(producto=producto, db=db)
+app.include_router(usuarios_router.router)
 
+<<<<<<< HEAD
 @app.post('/eliminar_categorias/{categoria_id}', response_model=schemas.EliminarCategoria)
 def eliminar_categorias(categoria_id: int, db: Session = Depends(get_db)):
     return adminCategorias.eliminar_categorias(categoria_id=categoria_id, db=db)
@@ -88,3 +79,5 @@ async def crear_producto_nuevo(
 @app.get("/buscar_producto")
 async def buscar_producto(palabra_clave:str,db: Session = Depends(get_db)):
     return crud.buscar_producto(db=db,palabra_clave=palabra_clave)
+=======
+>>>>>>> her204-test-branch
