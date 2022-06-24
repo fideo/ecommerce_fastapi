@@ -24,6 +24,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 #agregando las rutas de categorias
 app.include_router(categorias.router, tags=["categorias"])
 app.include_router(adminCategorias.router, tags=["categorias"])
+app.include_router(usuarios.router, tags=["usuarios"])
 
 templates = Jinja2Templates(directory="templates")
 
