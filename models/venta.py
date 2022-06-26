@@ -1,13 +1,25 @@
-from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, DateTime, Table
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Date,
+    DateTime,
+    Table,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from sql_app.database import Base
+
 
 class Venta(Base):
     __tablename__ = "ventas"
 
     venta_id = Column(Integer, primary_key=True, index=True)
     fecha_de_venta = Column(Date)
+
     @property
     def productos(self):
         s = """
@@ -22,5 +34,20 @@ class Venta(Base):
             INNER JOIN ventas ON temp.venta_id = ventas.venta_id
             WHERE ventas.venta_id = :ventaid
             """
-        result = object_session(self).execute(s,params={"ventaid":self.venta_id}).fetchall()
+        result = (
+            object_session(self)
+            .execute(s, params={"ventaid": self.venta_id})
+            .fetchall()
+        )
         return result
+
+
+class VentaProducto(Base):
+    __tablename__ = "ventas_productos"
+    venta_id = Column(ForeignKey("ventas.venta_id"), primary_key=True)
+    producto_id = Column(ForeignKey("productos.producto_id"), primary_key=True)
+    precio_unitario = Column(Float)
+    cantidad = Column(Integer)
+
+    def precio_total(self):
+        return self.precio_unitario * self.cantidad
