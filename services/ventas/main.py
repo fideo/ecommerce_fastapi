@@ -1,6 +1,6 @@
 from typing import List
 from sqlalchemy.orm import Session
-from schemas import venta as ventas_schemas
+from schemas import ventas as ventas_schemas
 from models.venta import Venta, VentaProducto
 from models.producto import Producto
 import datetime
