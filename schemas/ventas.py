@@ -3,23 +3,34 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
+class VentaProductoCreate(BaseModel):
+    producto_id: int
+    cantidad: int
+
+
+class Producto(BaseModel):
+    nombre_producto: str
+    link_de_imagen: str
+    descripcion: str
+
+    class Config:
+        orm_mode = True
+
+
 class VentaProducto(BaseModel):
-    producto_id: int
-    cantidad: int
-
-
-class VentaProductoBase(BaseModel):
-    venta_id: int
-    producto_id: int
-    cantidad: int
+    producto: Producto
     precio_unitario: float
+    cantidad: int
 
-
-class VentaCreate(BaseModel):
-    venta_productos: List[VentaProducto] = []
+    class Config:
+        orm_mode = True
 
 
 class Venta(BaseModel):
     venta_id: int
     fecha_venta: datetime
-    venta_productos: List[VentaProducto] = []
+    ventas_productos: List[VentaProducto] = []
+    precio_total: float
+
+    class Config:
+        orm_mode = True

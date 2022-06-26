@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from services.ventas import main as ServicioVentas
-from schemas.ventas import Venta, VentaProducto
+from schemas.ventas import Venta, VentaProductoCreate
 
 router = APIRouter(prefix="/ventas", tags=["ventas"])
 
@@ -24,7 +24,7 @@ async def obtener_venta(id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=Venta)
 async def crear_venta(
-    venta_productos: List[VentaProducto], db: Session = Depends(get_db)
+    venta_productos: List[VentaProductoCreate], db: Session = Depends(get_db)
 ):
     venta = ServicioVentas.crear_venta(db, venta_productos)
     return venta
