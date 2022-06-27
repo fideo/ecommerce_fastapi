@@ -5,13 +5,16 @@ from datetime import datetime
 
 class CategoriaBase(BaseModel):
     nombre_categoria: str
-    descripcion: str
-    #esta_activo: bool
+    descripcion: Optional[str] = None
+    
     class Config:
         orm_mode = True
 
 class CategoriaCreate(CategoriaBase):
     pass
+
+class Categoria(CategoriaBase):
+    categoria_id: int
 
 class ActualizarCategoria(BaseModel):
     nombre_categoria: str
@@ -25,3 +28,4 @@ class EliminarCategoria(BaseModel):
     mensaje: str
     class Config:
         orm_mode = True
+

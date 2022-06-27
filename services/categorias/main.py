@@ -11,6 +11,10 @@ def obtener_categorias(db: Session = Depends(get_db)):
     categoria = db.query(Categoria).all()
     return categoria
 
+def buscar_categoria(db:Session, nombre_categoria):
+    categoria = db.query(Categoria).filter(Categoria.nombre_categoria==nombre_categoria).first()
+    return categoria
+
 
 def crear_categorias(categoria:categorias_schemas.CategoriaCreate, db: Session = Depends(get_db)):
     categoria = Categoria(
