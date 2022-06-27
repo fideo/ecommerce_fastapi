@@ -27,14 +27,14 @@ def login_para_acceder_token(db : Session = Depends(get_db), form_data: OAuth2Pa
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.post("/users/", response_model=usuarios_schemas.Usuario)
+@router.post("/crear/", response_model=usuarios_schemas.Usuario)
 def crear_usuario(usuario: usuarios_schemas.UsuarioCreate, db: Session = Depends(get_db)):
      db_user = usuarios_services.obtener_usuario_por_nombre(db, nombre_de_usuario=usuario.nombre_de_usuario)
      if db_user:
          raise HTTPException(status_code=400, detail="Email or Username already registered") 
      return usuarios_services.crear_usuario(db=db, user=usuario) 
 
-@router.get("/users/", response_model=List[usuarios_schemas.Usuario]) 
+@router.get("/todos_los_usuarios/", response_model=List[usuarios_schemas.Usuario]) 
 def leer_usuarios(skip: int = 0, limite: int = 100, db: Session = Depends(get_db)):
     users = usuarios_services.obtener_varios_usuarios(db, skip=skip, limite=limite) 
     return users
