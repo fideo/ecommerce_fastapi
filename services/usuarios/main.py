@@ -27,7 +27,7 @@ def verificar_contrasenia(contrasenia_base, contrasenia_encriptada):
 
 
 def obtener_usuario(db: Session, usuario_id: int):
-    return db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    return db.query(Usuario).filter(Usuario.usuario_id == usuario_id).first()
 
 
 def obtener_varios_usuarios(db: Session, skip: int = 0, limite: int = 100):

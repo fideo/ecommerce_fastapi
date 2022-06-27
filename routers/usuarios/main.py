@@ -1,4 +1,5 @@
 from dependencies import get_db
+from typing import List
 from sqlalchemy.orm import Session
 from models.usuario import Usuario
 from datetime import datetime, timedelta
@@ -33,16 +34,16 @@ def crear_usuario(usuario: usuarios_schemas.UsuarioCreate, db: Session = Depends
          raise HTTPException(status_code=400, detail="Email or Username already registered") 
      return usuarios_services.crear_usuario(db=db, user=usuario) 
 
-@router.get("/users/", response_model=usuarios_schemas.Usuario) 
-def leer_usuarios(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    users = usuarios_services.obtener_varios_usuarios(db, skip=skip, limit=limit) 
+@router.get("/users/", response_model=List[usuarios_schemas.Usuario]) 
+def leer_usuarios(skip: int = 0, limite: int = 100, db: Session = Depends(get_db)):
+    users = usuarios_services.obtener_varios_usuarios(db, skip=skip, limite=limite) 
     return users
 
 @router.get("/users/me/", response_model=usuarios_schemas.Usuario)
 async def leer_mis_usuarios(current_user: usuarios_schemas.Usuario = Depends(usuarios_services.obtener_usuario_activo_actual)):
     return current_user
 
-@router.get("/users/{usuario_id}", response_model=usuarios_schemas.Usuario)
+@router.get("/users/{usuario_id}", response_model=List[usuarios_schemas.Usuario])
 def leer_un_usuario(usuario_id: int, db: Session = Depends(get_db)):
     db_user = usuarios_services.obtener_usuario(db, usuario_id=usuario_id) 
     if db_user is None:

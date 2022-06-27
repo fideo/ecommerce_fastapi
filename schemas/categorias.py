@@ -5,7 +5,7 @@ from datetime import datetime
 
 class CategoriaBase(BaseModel):
     nombre_categoria: str
-    descripcion: str
+    descripcion: Optional[str] = None
     
     class Config:
         orm_mode = True
