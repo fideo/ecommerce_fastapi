@@ -13,6 +13,7 @@ class Producto(Base):
     fecha_de_publicacion = Column(DateTime)
     numero_de_productos_subidos = Column(Integer)
     precio_unitario_de_producto = Column(Integer)
+    stock = Column(Integer)
     link_de_imagen = Column(String,nullable=False)
     descripcion = Column(String)
 
@@ -34,9 +35,9 @@ class Producto(Base):
         return result
 
     categorias = relationship(
-            "Categoria",
-            secondary = "categorias_de_productos",
-            back_populates = "productos"
+            "CategoriaProducto",
+            #secondary = "categorias_de_productos",
+            back_populates = "producto"
     )
 
 class VentaDeProducto(Base):
@@ -48,7 +49,22 @@ class VentaDeProducto(Base):
     precio_unitario = Column(Float)
     cantidad = Column(Integer)
 
+class CategoriaProducto(Base):
+    __tablename__ = "categorias_de_productos"
+
+    #categoria_producto_id = Column(Integer,primary_key=True,index=True)
+
+    
+    categoria_id = Column(Integer,ForeignKey("categorias.categoria_id"),primary_key=True)
+    categoria = relationship("Categoria",back_populates="productos")
+
+    producto_id = Column(Integer,ForeignKey("productos.producto_id"),primary_key=True)
+    producto = relationship("Producto",back_populates="categorias")
+
+"""
 categorias_de_productos = Table("categorias_de_productos", Base.metadata,
-    Column("categoria_id", ForeignKey("categorias.categoria_id"), primary_key=True),
-    Column("producto_id", ForeignKey("productos.producto_id"), primary_key=True),
-)
+    Column("categoria_id", ForeignKey("categorias.categoria_id"),
+                                 primary_key=True),
+    Column("producto_id", ForeignKey("productos.producto_id"),
+                                 primary_key=True),
+)"""

@@ -11,8 +11,8 @@ class Categoria(Base):
     descripcion = Column(String)
     #esta_activo = Column(Boolean)
     productos = relationship(
-        "Producto",
-        secondary="categorias_de_productos",
-        back_populates="categorias"
+        "CategoriaProducto",
+        #secondary="categorias_de_productos",
+        back_populates="categoria"
         )
 
