@@ -40,15 +40,6 @@ class Producto(Base):
             back_populates = "producto"
     )
 
-class VentaDeProducto(Base):
-    __tablename__ = "ventas_de_productos"
-    venta_id = Column(ForeignKey('ventas.venta_id'),
-                         primary_key=True)
-    producto_id = Column(ForeignKey('productos.producto_id'),
-                            primary_key=True)
-    precio_unitario = Column(Float)
-    cantidad = Column(Integer)
-
 class CategoriaProducto(Base):
     __tablename__ = "categorias_de_productos"
 

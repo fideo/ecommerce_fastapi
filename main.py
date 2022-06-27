@@ -11,6 +11,7 @@ from sql_app.database import SessionLocal,Base, engine
 from routers.productos import main as productos_router
 from routers.categorias import main as categorias_router
 from routers.usuarios import main as usuarios_router
+from routers.ventas import main as ventas_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -33,3 +34,5 @@ app.include_router(productos_router.router)
 app.include_router(categorias_router.router)
 
 app.include_router(usuarios_router.router)
+
+app.include_router(ventas_router.router)

@@ -1,26 +1,36 @@
-from sqlite3 import Date
-from typing import Any, List, Optional
-from pydantic import BaseModel, Field
+from typing import List
+from pydantic import BaseModel
 from datetime import datetime
 
-class VentaBase(BaseModel):
-    fecha_venta: Date
-    numero_de_productos_comprados: int
-    precio_total_de_venta: float
+
+class VentaProductoCreate(BaseModel):
     producto_id: int
+    cantidad: int
 
-    def __init__(__pydantic_self__, **data: Any) -> None:
-        super().__init__(**data)
-        __pydantic_self__.fecha_venta = Date()
 
-class VentaCreate(VentaBase):
-    pass
+class Producto(BaseModel):
+    nombre_producto: str
+    link_de_imagen: str
+    descripcion: str
 
     class Config:
         orm_mode = True
 
-class Venta(VentaBase):
+
+class VentaProducto(BaseModel):
+    producto: Producto
+    precio_unitario: float
+    cantidad: int
+
+    class Config:
+        orm_mode = True
+
+
+class Venta(BaseModel):
     venta_id: int
-    
+    fecha_venta: datetime
+    ventas_productos: List[VentaProducto] = []
+    precio_total: float
+
     class Config:
         orm_mode = True
