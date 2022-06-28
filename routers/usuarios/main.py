@@ -12,10 +12,33 @@ from jose import jwt
 from sqlalchemy.exc import IntegrityError
 from config import settings
 
-oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/login/token")
+oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/usuarios/inicio_sesion/token")
 
 router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 templates = Jinja2Templates(directory="templates")
+
+
+def get_user_from_token(db, token):
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="No se pueden validar las credenciales",
+            )
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="No se pueden validar las credenciales..",
+        )
+    user = db.query(Usuario).filter(Usuario.correo_de_usuario == username).first()
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTP_401_UNAUTHORIZED,
+            detail="No se pueden validar las credenciales...",
+        )
+    return user
 
 @router.get("/", tags=["usuarios"], response_model=List[schemas.Usuario])
 def obtener_usuarios(db: Session = Depends(get_db)):
@@ -28,7 +51,7 @@ def login(request: Request):
     return templates.TemplateResponse("inicio_sesion.html", {"request": request})
 
 
-@router.post("/login/token")
+@router.post("/inicio_sesion/token")
 def retrieve_token_for_authenticated_user(
     response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -57,6 +80,7 @@ async def login(response: Response, request: Request, db: Session = Depends(get_
     email = form.get("email")
     password = form.get("password")
     errors = []
+    print(errors)
     if not email:
         errors.append("Por favor ingrese un correo electrónico válido")
     if not password:
@@ -119,7 +143,8 @@ async def registration(request: Request, db: Session = Depends(get_db), token: s
         errors.append("La contraseña debería ser mayor a 6 caracteres")
     if not email:
         errors.append("Email no puede ser blanco")
-    user = Usuario(correo_de_usuario=email, contraseña_encriptada=Hasher.get_hash_password(password))
+    user = Usuario(correo_de_usuario=email, contraseña_encriptada=Hasher.get_hash_password(
+        password), pais=pais, esta_activo=1, ciudad=ciudad)
     if len(errors) > 0:
         return templates.TemplateResponse(
             "crear_cuenta.html", {"request": request, "errors": errors}
