@@ -44,3 +44,13 @@ axios.get("/productos/").then(r => {
     document.getElementById("listaProductos").appendChild(div).appendChild(button).appendChild(span)
   });
 })
+
+axios.get("/usuarios/?msg=rigistrado exitosamente").then(
+    function (response) {
+      // manejar respuesta exitosa
+      console.log(response);
+    })
+  .catch(function (error) {
+    // manejar error
+    console.log(error);
+  })
