@@ -1,5 +1,6 @@
 axios.get("/categorias/").then(r => {
-  r.data.categorias.forEach(categoria => {
+  console.log(r.data);
+  r.data.forEach(categoria => {
     console.log(categoria)
     const a = document.createElement("a")
     a.innerHTML = categoria.nombre_categoria
@@ -10,7 +11,7 @@ axios.get("/categorias/").then(r => {
 })
 
 axios.get("/productos/").then(r => {
-  r.data.productos.forEach(producto => {
+  r.data.forEach(producto => {
     const div = document.createElement("div")
     div.className = "flex flex-col items-center justify-center w-full max-w-lg mx-auto"
     document.getElementById("listaProductos").appendChild(div)
