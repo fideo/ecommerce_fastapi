@@ -52,10 +52,3 @@ class CategoriaProducto(Base):
     producto_id = Column(Integer,ForeignKey("productos.producto_id"),primary_key=True)
     producto = relationship("Producto",back_populates="categorias")
 
-"""
-categorias_de_productos = Table("categorias_de_productos", Base.metadata,
-    Column("categoria_id", ForeignKey("categorias.categoria_id"),
-                                 primary_key=True),
-    Column("producto_id", ForeignKey("productos.producto_id"),
-                                 primary_key=True),
-)"""
