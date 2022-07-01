@@ -17,23 +17,6 @@ class Producto(Base):
     link_de_imagen = Column(String,nullable=False)
     descripcion = Column(String)
 
-    @property
-    def ventas(self):
-        s = """
-            SELECT temp.* FROM (
-                SELECT
-                    ventas.*,
-                    ventas_de_productos.precio_unitario,
-                    ventas_de_productos.cantidad,
-                    ventas_de_productos.venta_id
-                FROM ventas INNER JOIN ventas_de_productos ON ventas.venta_id = ventas_de_productos.venta_id
-            ) AS temp
-            INNER JOIN productos ON temp.producto_id = productos.producto_id
-            WHERE productos.producto_id = :productoid
-            """
-        result = object_session(self).execute(s,params={"productoid":self.producto_id}).fetchall()
-        return result
-
     categorias = relationship(
             "CategoriaProducto",
             #secondary = "categorias_de_productos",
