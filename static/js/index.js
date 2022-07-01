@@ -1,5 +1,4 @@
 axios.get("/categorias/").then(r => {
-  console.log(r.data);
   r.data.forEach(categoria => {
     console.log(categoria)
     const a = document.createElement("a")
