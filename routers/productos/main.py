@@ -23,7 +23,12 @@ def buscar_producto(palabra_clave:str, db: Session = Depends(get_db)):
 async def crear_producto(producto: productos_schemas.ProductoCreate,db: Session = Depends(get_db)):
     return productos_services.crear_producto(db=db,producto=producto)
 
+@router.put("/actualizar/{producto_id}", tags=["productos"], response_model=productos_schemas.Producto) 
+def actualizar_producto(producto_id: int,producto_actualizado:productos_schemas.ActualizarProducto, db: Session = Depends(get_db)):
+    return productos_services.actualizar_producto(db=db, producto_id=producto_id,producto_actualizado=producto_actualizado)
+
+
 #creamos un endpoint que se conecte a la funcion que elimina un producto en el services
-@router.post("/eliminar/{producto_id}", tags=["productos"], response_model=productos_schemas.Producto) 
+@router.delete("/eliminar/{producto_id}", tags=["productos"], response_model=productos_schemas.Producto) 
 def eliminar_producto(producto_id: int, db: Session = Depends(get_db)):
     return productos_services.eliminar_producto(db=db, producto_id=producto_id)
