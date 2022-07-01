@@ -6,7 +6,7 @@ from jose import JWTError, jwt
 from dependencies import get_db
 from sqlalchemy.orm import Session
 from models.usuario import Usuario
-from passlib.context import CryptContext
+#from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from schemas import usuarios as schemas_usuarios
 from fastapi.security import OAuth2PasswordBearer
@@ -17,7 +17,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+#pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="usuario/token")
 
@@ -84,12 +84,15 @@ async def obtener_usuario_actual(db : Session = Depends(get_db), token: str = De
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
+        print(username)
         if username is None:
             raise credentials_exception
         token_data = schemas_usuarios.TokenData(username=username)
-    except JWTError:
+    except JWTError as error:
+        print(error)
+        print("jwt error")
         raise credentials_exception
-    user = obtener_usuario_por_nombre(db, username=token_data.username)
+    user = obtener_usuario_por_nombre(db, nombre_de_usuario=token_data.username)
     if user is None:
         raise credentials_exception
     return user

@@ -1,6 +1,4 @@
-from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Date, DateTime, Table
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy import Boolean, Column, Integer, String
 from sql_app.database import Base
 
 class Usuario(Base):
@@ -11,5 +9,5 @@ class Usuario(Base):
     correo_de_usuario = Column(String, unique=True)
     contrasenia_encriptada = Column(String)
     pais = Column(String)
-    esta_activo = Column(Boolean)
+    esta_activo = Column(Boolean, default=True)
     ciudad = Column(String)
