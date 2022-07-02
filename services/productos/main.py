@@ -10,6 +10,17 @@ import datetime
 def obtener_productos(db: Session):
     return db.query(producto_models.Producto).all()
 
+def seleccionar_productos_por_categorias(categoria_id: int,db: Session):
+    productos_ids = db.query(producto_models.CategoriaProducto).filter_by(categoria_id=categoria_id).all()
+
+    print(productos_ids)
+
+    seleccionado = [db.query(producto_models.Producto).filter(
+                            producto_models.Producto.producto_id == producto_0.producto_id).first() 
+                                for producto_0 in productos_ids ]
+
+    return seleccionado
+
 #funcion que crea un producto
 def crear_producto(db: Session,producto:productos_schemas.ProductoCreate):
 

@@ -19,13 +19,20 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-
 @app.get('/')
 async def index(request: Request):
   context = {
     "request": request,
   }
   return templates.TemplateResponse("index.html", context)
+
+@app.get('/explorando_por_categoria/{categoria_id}')
+async def index(categoria_id:int,request: Request):
+  context = {
+    "request": request,
+  }
+  return templates.TemplateResponse("productos_seleccionados.html", context)
+
 
 templates = Jinja2Templates(directory="templates")
 

@@ -1,9 +1,8 @@
 axios.get("/categorias/").then(r => {
   r.data.forEach(categoria => {
-    console.log(categoria)
     const a = document.createElement("a")
     a.innerHTML = categoria.nombre_categoria
-    a.href = "/categoria/" + categoria.nombre_categoria
+    a.href = `/explorando_por_categoria/${categoria.categoria_id}` 
     a.className = "block font-medium text-gray-500 dark:text-gray-300 hover:underline"
     document.getElementById("listaCategorias").appendChild(a)
   });
