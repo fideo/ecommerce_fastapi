@@ -1,11 +1,10 @@
-
 let href = window.location.href
 
-let split_href = href.split("/")
+let split_href = href.split("?")
 
 let goal_href = split_href[split_href.length-1]
 
-console.log(split_href)
+console.log(goal_href)
 
 axios.get("/categorias/").then(r => {
     r.data.forEach(categoria => {
@@ -16,10 +15,9 @@ axios.get("/categorias/").then(r => {
       document.getElementById("listaCategorias").appendChild(a)
     });
   })
-  
-axios.get("/productos/productos_por_categoria/"+goal_href).then(r => {
-    console.log(goal_href)
-    r.data.forEach(producto => {
+
+axios.get("/productos/buscar?"+goal_href).then(r => {
+     r.data.forEach(producto => {
       const div = document.createElement("div")
       div.className = "flex flex-col items-center justify-center w-full max-w-lg mx-auto"
       document.getElementById("listaProductos").appendChild(div)
@@ -54,4 +52,3 @@ axios.get("/productos/productos_por_categoria/"+goal_href).then(r => {
       document.getElementById("listaProductos").appendChild(div).appendChild(button).appendChild(span)
     });
   })
-  
