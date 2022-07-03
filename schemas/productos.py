@@ -17,8 +17,17 @@ class ProductoBase(BaseModel):
         orm_mode = True
 
 
+class ActualizarProducto(BaseModel):
+    nombre_producto: str
+    stock: int
+    link_de_imagen: str
+    precio_unitario_de_producto: int
+    descripcion: Optional[str] = None
+    class Config:
+        orm_mode = True
+
+
 class ProductoCreate(ProductoBase): 
-    numero_de_categorias: int
     categorias: List[str]#Optional[str] = None
 
 class Producto(ProductoBase):
