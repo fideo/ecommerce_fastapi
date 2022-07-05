@@ -1,163 +1,50 @@
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from utils import OAuth2PasswordBearerWithCookie
-from typing import List
-from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
-from sql_app import models, schemas
 from dependencies import get_db
-from fastapi import APIRouter, Depends, HTTPException, Request, responses, status, Response
-from .hashing import Hasher
-from sql_app.models import Usuario
-from jose import jwt
-from sqlalchemy.exc import IntegrityError
-from config import settings
+from typing import List
+from sqlalchemy.orm import Session
+from models.usuario import Usuario
+from schemas import usuarios as usuarios_schemas
+from fastapi.security import OAuth2PasswordRequestForm
+from services.usuarios import main as usuarios_services
+from fastapi import Depends, APIRouter, HTTPException
 
-oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/usuarios/inicio_sesion/token")
+router = APIRouter(prefix="/usuario", tags=["usuario"])
 
-router = APIRouter(prefix="/usuarios", tags=["usuarios"])
-templates = Jinja2Templates(directory="templates")
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-
-def get_user_from_token(db, token):
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
-        username = payload.get("sub")
-        if not username:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="No se pueden validar las credenciales",
-            )
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="No se pueden validar las credenciales..",
-        )
-    user = db.query(Usuario).filter(Usuario.correo_de_usuario == username).first()
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTP_401_UNAUTHORIZED,
-            detail="No se pueden validar las credenciales...",
-        )
-    return user
-
-@router.get("/", tags=["usuarios"], response_model=List[schemas.Usuario])
-def obtener_usuarios(db: Session = Depends(get_db)):
-  usuario = db.query(models.Usuario).all()
-  return usuario
-
-
-@router.get("/inicio_sesion")
-def login(request: Request):
-    return templates.TemplateResponse("inicio_sesion.html", {"request": request})
-
-
-@router.post("/inicio_sesion/token")
-def retrieve_token_for_authenticated_user(
-    response: Response,
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db),
-):
-    user = db.query(Usuario).filter(Usuario.correo_de_usuario == form_data.username).first()
+@router.post("/token", response_model=usuarios_schemas.Token)
+def login_para_acceder_token(db : Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+    user = usuarios_services.autentificar_usuario(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario incorrecto"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
         )
-    if not Hasher.verify_password(form_data.password, user.contraseña_encriptada):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Contraseña incorrecta"
-        )
-    data = {"sub": form_data.username}
-    jwt_token = jwt.encode(data, settings.SECRET_KEY,
-                           algorithm=settings.ALGORITHM)
-    response.set_cookie(key="access_token",
-                        value=f"Bearer {jwt_token}", httponly=True)
-    return {"access_token": jwt_token, "token_type": "bearer"}
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = usuarios_services.crear_acceso_al_token(
+        data={"sub": user.nombre_de_usuario}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
+@router.post("/crear/", response_model=usuarios_schemas.Usuario)
+def crear_usuario(usuario: usuarios_schemas.UsuarioCreate, db: Session = Depends(get_db)):
+     db_user = usuarios_services.obtener_usuario_por_nombre(db, nombre_de_usuario=usuario.nombre_de_usuario)
+     if db_user:
+         raise HTTPException(status_code=400, detail="Email or Username already registered") 
+     return usuarios_services.crear_usuario(db=db, user=usuario) 
 
-@router.post("/inicio_sesion")
-async def login(response: Response, request: Request, db: Session = Depends(get_db)):
-    form = await request.form()
-    email = form.get("email")
-    password = form.get("password")
-    errors = []
-    print(errors)
-    if not email:
-        errors.append("Por favor ingrese un correo electrónico válido")
-    if not password:
-        errors.append("Ingrese una contraseña")
-    if len(errors) > 0:
-        return templates.TemplateResponse(
-            "inicio_sesion.html", {"request": request, "errors": errors}
-        )
-    try:
-        user = db.query(Usuario).filter(Usuario.email == email).first()
-        if user is None:
-            errors.append("El correo electrónico no existe!!")
-            return templates.TemplateResponse(
-                "inicio_sesion.html", {"request": request, "errors": errors}
-            )
-        else:
-            if Hasher.verify_password(password, user.password):
-                data = {"sub": email}
-                jwt_token = jwt.encode(
-                    data, settings.SECRET_KEY, algorithm=settings.ALGORITHM
-                )
-                # if we redirect response in below way, it will not set the cookie
-                # return responses.RedirectResponse("/?msg=Login Successfull", status_code=status.HTTP_302_FOUND)
-                msg = "Inicio de Sesión correctamente"
-                response = templates.TemplateResponse(
-                    "inicio_sesion.html", {"request": request, "msg": msg}
-                )
-                response.set_cookie(
-                    key="access_token", value=f"Bearer {jwt_token}", httponly=True
-                )
-                return response
-            else:
-                errors.append("Invalid Password")
-                return templates.TemplateResponse(
-                    "inicio_sesion.html", {
-                        "request": request, "errors": errors}
-                )
-    except:
-        errors.append(
-            "Algo está Mail mientras te autentificabas o con tu token!")
-        return templates.TemplateResponse(
-            "inicio_sesion.html", {"request": request, "errors": errors}
-        )
+@router.get("/todos_los_usuarios/", response_model=List[usuarios_schemas.Usuario]) 
+def leer_usuarios(skip: int = 0, limite: int = 100, db: Session = Depends(get_db)):
+    users = usuarios_services.obtener_varios_usuarios(db, skip=skip, limite=limite) 
+    return users
 
+@router.get("/users/me/", response_model=usuarios_schemas.Usuario)
+async def leer_mi_usuario(current_user: usuarios_schemas.Usuario = Depends(usuarios_services.obtener_usuario_activo_actual)):
+    return current_user
 
-@router.get("/crear_cuenta")
-def registration(request: Request):
-    return templates.TemplateResponse("crear_cuenta.html", {"request": request})
-
-
-@router.post("/crear_cuenta")
-async def registration(request: Request, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
-    form = await request.form()
-    email = form.get("email")
-    password = form.get("password")
-    pais = form.get("pais")
-    ciudad= form.get("ciudad")
-    errors = []
-    if not password or len(password) < 6:
-        errors.append("La contraseña debería ser mayor a 6 caracteres")
-    if not email:
-        errors.append("Email no puede ser blanco")
-    user = Usuario(correo_de_usuario=email, contraseña_encriptada=Hasher.get_hash_password(
-        password), pais=pais, esta_activo=1, ciudad=ciudad)
-    if len(errors) > 0:
-        return templates.TemplateResponse(
-            "crear_cuenta.html", {"request": request, "errors": errors}
-        )
-    try:
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-        return responses.RedirectResponse(
-            "/?msg=rigistrado exitosamente", status_code=status.HTTP_302_FOUND
-        )
-    except IntegrityError:
-        errors.append("Correo electrónico duplicado")
-        return templates.TemplateResponse(
-            "crear_cuenta.html", {"request": request, "errors": errors}
-        )
+@router.get("/users/{usuario_id}", response_model=usuarios_schemas.Usuario)
+def leer_un_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    db_user = usuarios_services.obtener_usuario(db, usuario_id=usuario_id) 
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found") 
+    return db_user

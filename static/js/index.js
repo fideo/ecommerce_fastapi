@@ -1,15 +1,15 @@
 axios.get("/categorias/").then(r => {
-  r.data.categorias.forEach(categoria => {
+  r.data.forEach(categoria => {
     const a = document.createElement("a")
     a.innerHTML = categoria.nombre_categoria
-    a.href = "/categoria/" + categoria.nombre_categoria
-    a.className = "block font-medium text-gray-600 hover:underline"
+    a.href = `/explorando_por_categoria/${categoria.categoria_id}` 
+    a.className = "block font-medium text-gray-500 dark:text-gray-300 hover:underline"
     document.getElementById("listaCategorias").appendChild(a)
   });
 })
 
 axios.get("/productos/").then(r => {
-  r.data.productos.forEach(producto => {
+  r.data.forEach(producto => {
     const div = document.createElement("div")
     div.className = "flex flex-col items-center justify-center w-full max-w-lg mx-auto"
     document.getElementById("listaProductos").appendChild(div)
@@ -19,11 +19,11 @@ axios.get("/productos/").then(r => {
     img.className = "object-cover w-full rounded-md h-72 xl:h-80"
     document.getElementById("listaProductos").appendChild(div).appendChild(img)
     const h4 = document.createElement("h4")
-    h4.className = "mt-2 text-lg text-gray-900"
+    h4.className = "mt-2 text-lg font-medium text-gray-700 dark:text-gray-200"
     h4.innerHTML = producto.nombre_producto
     document.getElementById("listaProductos").appendChild(div).appendChild(h4)
     const p = document.createElement("p")
-    p.className = "text-blue-700 font-medium"
+    p.className = "text-blue-500"
     p.innerHTML = producto.precio_unitario_de_producto
     document.getElementById("listaProductos").appendChild(div).appendChild(p)
     const button = document.createElement("button")
@@ -44,13 +44,3 @@ axios.get("/productos/").then(r => {
     document.getElementById("listaProductos").appendChild(div).appendChild(button).appendChild(span)
   });
 })
-
-axios.get("/usuarios/?msg=rigistrado exitosamente").then(
-    function (response) {
-      // manejar respuesta exitosa
-      console.log(response);
-    })
-  .catch(function (error) {
-    // manejar error
-    console.log(error);
-  })
