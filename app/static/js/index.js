@@ -1,8 +1,13 @@
 //Dispositivos con poca resolución 
 const button = document.querySelector('#menu-button');
 const menu = document.querySelector('#menu');
+const h3 = document.querySelector('#menu-categoria');
+const categoria = document.querySelector('#listaCategorias');
 button.addEventListener('click', () => {
   menu.classList.toggle('hidden');
+});
+h3.addEventListener('click', () => {
+  categoria.classList.toggle('hidden');
 });
 
 axios.get("/categorias/").then(r => {
