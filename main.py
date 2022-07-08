@@ -40,6 +40,18 @@ async def index(palabra_clave:str,request: Request):
   }
   return templates.TemplateResponse("index.html", context)
 
+@app.get('/crear_producto')
+async def index(request:Request):
+  entradas = ["nombre_producto",
+          "numero_de_productos_subidos","stock","link_de_imagen",
+          "precio_unitario_de_producto","descripcion","categorias"]
+  tipos = ["text","number","number","string","number","text","text"]
+  context = {
+    "request":request,
+    "entradas": [a for a in zip(entradas,tipos)]
+  }
+  return templates.TemplateResponse("endpoints_producto/crear_productos_planilla.html", context)
+
 templates = Jinja2Templates(directory="templates")
 
 app.include_router(productos_router.router)

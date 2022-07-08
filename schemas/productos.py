@@ -7,7 +7,6 @@ from schemas import categorias
 
 class ProductoBase(BaseModel):
     nombre_producto: str
-    fecha_de_publicacion: datetime
     numero_de_productos_subidos: int
     stock: int
     link_de_imagen: str
