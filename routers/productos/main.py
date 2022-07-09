@@ -8,10 +8,13 @@ from services.productos import main as productos_services
 router = APIRouter(prefix="/productos", tags=["productos"])
 
 #creamos un endpoint que se conecte a la funcion que retorna todos los productos en el services
-@router.get("/", tags=["productos"], response_model=List[productos_schemas.Producto])
+@router.get("/")
 def obtener_productos(db: Session = Depends(get_db)):
     producto = productos_services.obtener_productos(db=db)
-    return producto
+    context = {
+        "productos": producto
+    }
+    return context
 
 #creamos un endpoint que se conecte a la  funcion que busca productos por nombre en el services
 @router.get("/buscar", tags=["productos"], response_model=List[productos_schemas.Producto])
