@@ -1,16 +1,15 @@
 axios.get("/categorias/").then(r => {
-  r.data.categorias.forEach(categoria => {
-    console.log(categoria)
+  r.data.forEach(categoria => {
     const a = document.createElement("a")
     a.innerHTML = categoria.nombre_categoria
-    a.href = "/categoria/" + categoria.nombre_categoria
+    a.href = `/explorando_por_categoria/${categoria.categoria_id}` 
     a.className = "block font-medium text-gray-500 dark:text-gray-300 hover:underline"
     document.getElementById("listaCategorias").appendChild(a)
   });
 })
 
 axios.get("/productos/").then(r => {
-  r.data.productos.forEach(producto => {
+  r.data.forEach(producto => {
     const div = document.createElement("div")
     div.className = "flex flex-col items-center justify-center w-full max-w-lg mx-auto"
     document.getElementById("listaProductos").appendChild(div)

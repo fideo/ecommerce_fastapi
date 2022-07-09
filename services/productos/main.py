@@ -10,6 +10,17 @@ import datetime
 def obtener_productos(db: Session):
     return db.query(producto_models.Producto).all()
 
+def seleccionar_productos_por_categorias(categoria_id: int,db: Session):
+    productos_ids = db.query(producto_models.CategoriaProducto).filter_by(categoria_id=categoria_id).all()
+
+    print(productos_ids)
+
+    seleccionado = [db.query(producto_models.Producto).filter(
+                            producto_models.Producto.producto_id == producto_0.producto_id).first() 
+                                for producto_0 in productos_ids ]
+
+    return seleccionado
+
 #funcion que crea un producto
 def crear_producto(db: Session,producto:productos_schemas.ProductoCreate):
 
@@ -34,15 +45,28 @@ def crear_producto(db: Session,producto:productos_schemas.ProductoCreate):
             db.commit()
             db.refresh(db_categoria)
             categoria_id = db_categoria.categoria_id
+
         print(categoria_id)
-        db.add(db_producto)
-        db.commit()
-        db.refresh(db_producto)
+    
         db_producto_categoria = producto_models.CategoriaProducto(categoria_id=categoria_id,
                                                                 producto_id=db_producto.producto_id)
         db.add(db_producto_categoria)
         db.commit()
+        db.refresh(db_producto_categoria)
+
     return db_producto
+
+def actualizar_producto(producto_id:int, producto_actualizado:productos_schemas.ActualizarProducto, db: Session):
+    producto = db.query(producto_models.Producto).filter_by(producto_id=producto_id).first()
+    print(producto_id)
+    producto.nombre_producto=producto_actualizado.nombre_producto
+    producto.stock=producto_actualizado.stock
+    producto.descripcion=producto_actualizado.descripcion
+    producto.link_de_imagen= producto_actualizado.link_de_imagen
+    producto.precio_unitario_de_producto =producto_actualizado.precio_unitario_de_producto
+    db.commit()
+    db.refresh(producto)
+    return producto
 
 #funcion que elimina un producto
 def eliminar_producto(db: Session, producto_id: int):

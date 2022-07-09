@@ -1,8 +1,5 @@
-from this import s
-from sqlite3 import Date
-from datetime import datetime
-from pydantic import BaseModel, Field
-from typing import Any, List, Optional,Union
+from pydantic import BaseModel, EmailStr
+from typing import Union
 
 class Token(BaseModel):
     access_token: str
@@ -13,7 +10,7 @@ class TokenData(BaseModel):
 
 class UsuarioBase(BaseModel):
     nombre_de_usuario: str
-    correo_de_usuario: str
+    correo_de_usuario: EmailStr
     pais: str
     ciudad: str
 
@@ -22,6 +19,6 @@ class UsuarioCreate(UsuarioBase):
 
 class Usuario(UsuarioBase):
     usuario_id: int
-    esta_activo: Union[bool,None] = None
+    
     class Config:
         orm_mode = True
