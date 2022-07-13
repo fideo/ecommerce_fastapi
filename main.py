@@ -31,14 +31,14 @@ async def index(categoria_id:int,request: Request):
   context = {
     "request": request,
   }
-  return templates.TemplateResponse("endpoints_producto/productos_seleccionados.html", context)
+  return templates.TemplateResponse("index.html", context)
 
 @app.get('/productos_buscados')
 async def index(palabra_clave:str,request: Request):
   context = {
     "request": request,
   }
-  return templates.TemplateResponse("endpoints_producto/buscar_productos.html", context)
+  return templates.TemplateResponse("index.html", context)
 
 templates = Jinja2Templates(directory="templates")
 
