@@ -1,3 +1,6 @@
+import sys
+
+sys.path.append("app")
 from typing import List
 from urllib import request
 
@@ -17,7 +20,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 @app.get('/')
 async def index(request: Request):
@@ -52,7 +55,7 @@ async def index(request:Request):
   }
   return templates.TemplateResponse("endpoints_producto/crear_productos_planilla.html", context)
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="app/templates")
 
 app.include_router(productos_router.router)
 
