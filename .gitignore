@@ -1,5 +1,5 @@
 #caches
 __pycache__
-
+ecommerce_fastapi.db
 #virtualenv entorno de desarrollo
 env
