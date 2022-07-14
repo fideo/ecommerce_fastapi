@@ -17,7 +17,10 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static/"), name="static")
+app.mount("/css", StaticFiles(directory="static/css/"), name="css")
+app.mount("/js", StaticFiles(directory="static/js/"), name="js")
+app.mount("/images", StaticFiles(directory="static/images/"), name="images")
 
 @app.get('/')
 async def index(request: Request):
