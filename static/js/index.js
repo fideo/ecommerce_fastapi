@@ -67,6 +67,15 @@ if (goal_href) {
         document.getElementById("listaProductos").appendChild(div).appendChild(button).appendChild(span)
       });
     })
+    /** Agrego una funcion para mostrar la cantidad de productos que se muestran en pantalla */
+    const cantidadProductos = document.querySelector('#cantidadProductos');
+    axios.get("/productos/buscar?" + goal_href_buscar).then(r => {
+      let cantidad = r.data.length
+      const p = document.createElement("p")
+      p.className = "text-gray-500 dark:text-gray-300"
+      p.innerHTML = cantidad + " Items"
+      document.getElementById("cantidadProductos").appendChild(p)
+    })
   } else {
     axios.get("/productos/productos_por_categoria/" + goal_href).then(r => {
       r.data.forEach(producto => {
@@ -103,6 +112,16 @@ if (goal_href) {
         span.innerHTML = "Agregar al carro"
         document.getElementById("listaProductos").appendChild(div).appendChild(button).appendChild(span)
       });
+    })
+
+    /** Agrego una funcion para mostrar la cantidad de productos que se muestran en pantalla */
+    const cantidadProductos = document.querySelector('#cantidadProductos');
+    axios.get("/productos/productos_por_categoria/" + goal_href).then(r => {
+      let cantidad = r.data.length
+      const p = document.createElement("p")
+      p.className = "text-gray-500 dark:text-gray-300"
+      p.innerHTML = cantidad + " Items"
+      document.getElementById("cantidadProductos").appendChild(p)
     })
   }
 } else {
@@ -141,5 +160,16 @@ if (goal_href) {
       span.innerHTML = "Agregar al carro"
       document.getElementById("listaProductos").appendChild(div).appendChild(button).appendChild(span)
     });
+  })
+
+  /** Agrego una funcion para mostrar la cantidad de productos que se muestran en pantalla */
+  const cantidadProductos = document.querySelector('#cantidadProductos');
+  axios.get("/productos/").then(r => {
+    let cantidad = r.data.length
+    const p = document.createElement("p")
+    p.className = "text-gray-500 dark:text-gray-300"
+    p.innerHTML = cantidad + " Items"
+    document.getElementById("cantidadProductos").appendChild(p)
+    console.log(cantidad)
   })
 }
