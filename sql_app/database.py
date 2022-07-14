@@ -7,10 +7,10 @@ postgres_password = os.environ.get("POSTGRES_PASSWORD")
 postgres_port = os.environ.get("POSTGRES_PORT")
 postgres_user = os.environ.get("POSTGRES_USER")
 postgres_host = os.environ.get("POSTGRES_HOST")
-postgres_host = os.environ.get("POSTGRES_DB")
+postgres_db = os.environ.get("POSTGRES_DB")
 
 #SQLALCHEMY_DATABASE_URL = "sqlite:///./ecommerce_fastapi.db"
-SQLALCHEMY_DATABASE_URL = f"postgresql://{postgres_user}:{postgres_password}@{postgres_host}:{postgres_port}/ecommerce_fastapi"
+SQLALCHEMY_DATABASE_URL = f"postgresql://{postgres_user}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_db}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL#, connect_args={"check_same_thread": False}
