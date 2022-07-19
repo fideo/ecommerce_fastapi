@@ -10,6 +10,17 @@ h3.addEventListener('click', () => {
   categoria.classList.toggle('hidden');
 });
 
+/** Despliegue de lista de productos en stock */
+function injectdata(endpoint, targetId, staticText, tag, classNames) {
+  axios.get(endpoint).then(r => {
+    let contenido = r.data.length
+    const p = document.createElement("p")
+    p.className = classNames
+    p.innerHTML = contenido + staticText
+    document.getElementById(targetId).appendChild(p)
+  });
+}
+
 axios.get("/categorias/").then(r => {
   r.data.forEach(categoria => {
     const a = document.createElement("a")
@@ -69,43 +80,22 @@ if (goal_href) {
     axios.get("/productos/buscar?" + goal_href_buscar).then(r => {
       r.data.forEach(obtener_productos);
     })
-    /** Agrego una funcion para mostrar la cantidad de productos que se muestran en pantalla */
-    const cantidadProductos = document.querySelector('#cantidadProductos');
-    axios.get("/productos/buscar?" + goal_href_buscar).then(r => {
-      let cantidad = r.data.length
-      const p = document.createElement("p")
-      p.className = "text-gray-500 dark:text-gray-300"
-      p.innerHTML = cantidad + " Items"
-      document.getElementById("cantidadProductos").appendChild(p)
-    })
+
+    injectdata("/productos/buscar?" + goal_href_buscar, "cantidadProductos", " Items", "p", "text-gray-500 dark:text-gray-300")
+
   } else {
     axios.get("/productos/productos_por_categoria/" + goal_href).then(r => {
       r.data.forEach(obtener_productos);
     })
 
-    /** Agrego una funcion para mostrar la cantidad de productos que se muestran en pantalla */
-    const cantidadProductos = document.querySelector('#cantidadProductos');
-    axios.get("/productos/productos_por_categoria/" + goal_href).then(r => {
-      let cantidad = r.data.length
-      const p = document.createElement("p")
-      p.className = "text-gray-500 dark:text-gray-300"
-      p.innerHTML = cantidad + " Items"
-      document.getElementById("cantidadProductos").appendChild(p)
-    })
+    injectdata("/productos/productos_por_categoria/" + goal_href, "cantidadProductos", " Items", "p", "text-gray-500 dark:text-gray-300")
+
   }
 } else {
   axios.get("/productos/").then(r => {
     r.data.forEach(obtener_productos);
   })
 
-  /** Agrego una funcion para mostrar la cantidad de productos que se muestran en pantalla */
-  const cantidadProductos = document.querySelector('#cantidadProductos');
-  axios.get("/productos/").then(r => {
-    let cantidad = r.data.length
-    const p = document.createElement("p")
-    p.className = "text-gray-500 dark:text-gray-300"
-    p.innerHTML = cantidad + " Items"
-    document.getElementById("cantidadProductos").appendChild(p)
-    console.log(cantidad)
-  })
+  injectdata("/productos/", "cantidadProductos", " Items", "p", "text-gray-500 dark:text-gray-300")
+
 }
