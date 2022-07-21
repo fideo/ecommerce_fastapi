@@ -12,15 +12,12 @@ from routers.productos import main as productos_router
 from routers.categorias import main as categorias_router
 from routers.usuarios import main as usuarios_router
 from routers.ventas import main as ventas_router
-
+from schemas import productos as productos_schemas
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static/"), name="static")
-app.mount("/css", StaticFiles(directory="static/css/"), name="css")
-app.mount("/js", StaticFiles(directory="static/js/"), name="js")
-app.mount("/images", StaticFiles(directory="static/images/"), name="images")
 
 @app.get('/')
 async def index(request: Request):
@@ -43,12 +40,22 @@ async def index(palabra_clave:str,request: Request):
   }
   return templates.TemplateResponse("index.html", context)
 
+@app.get('/crear_producto')
+async def index(request:Request):
+  entradas = eval(productos_schemas.ProductoCreate.schema_json())["properties"].keys()
+
+  tipos = ["text","number","number","string",
+          "number","text","text"]
+
+  context = {
+    "request":request,
+    "entradas": [a for a in zip(entradas,tipos)]
+  }
+  return templates.TemplateResponse("crear_productos_planilla.html", context)
+
 templates = Jinja2Templates(directory="templates")
 
 app.include_router(productos_router.router)
-
 app.include_router(categorias_router.router)
-
 app.include_router(usuarios_router.router)
-
 app.include_router(ventas_router.router)
