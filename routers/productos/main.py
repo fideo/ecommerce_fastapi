@@ -11,10 +11,7 @@ router = APIRouter(prefix="/productos", tags=["productos"])
 @router.get("/")
 def obtener_productos(db: Session = Depends(get_db)):
     producto = productos_services.obtener_productos(db=db)
-    context = {
-        "productos": producto
-    }
-    return context
+    return producto
 
 @router.get("/productos_por_categoria/{categoria_id}",tags=["productos"],response_model=List[productos_schemas.Producto])
 def obtener_productos_por_categoria(categoria_id:int,db: Session = Depends(get_db)):

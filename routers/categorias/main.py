@@ -10,10 +10,7 @@ router = APIRouter(prefix="/categorias", tags=["categorias"])
 @router.get("/")
 async def obtener_categorias(db: Session = Depends(get_db)):
     categoria = categorias_services.obtener_categorias(db)
-    context = {
-        "categorias": categoria
-    }
-    return context
+    return categoria
 
 @router.post("/crear", tags=["categorias"], response_model=categorias_schemas.Categoria)
 async def crear_categorias(categoria:categorias_schemas.CategoriaCreate, db: Session = Depends(get_db)):
