@@ -12,12 +12,12 @@ from routers.productos import main as productos_router
 from routers.categorias import main as categorias_router
 from routers.usuarios import main as usuarios_router
 from routers.ventas import main as ventas_router
-
+from schemas import productos as productos_schemas
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static/"), name="static")
 
 @app.get('/')
 async def index(request: Request):
@@ -31,21 +31,31 @@ async def index(categoria_id:int,request: Request):
   context = {
     "request": request,
   }
-  return templates.TemplateResponse("endpoints_producto/productos_seleccionados.html", context)
+  return templates.TemplateResponse("index.html", context)
 
 @app.get('/productos_buscados')
 async def index(palabra_clave:str,request: Request):
   context = {
     "request": request,
   }
-  return templates.TemplateResponse("endpoints_producto/buscar_productos.html", context)
+  return templates.TemplateResponse("index.html", context)
+
+@app.get('/crear_producto')
+async def index(request:Request):
+  entradas = eval(productos_schemas.ProductoCreate.schema_json())["properties"].keys()
+
+  tipos = ["text","number","number","string",
+          "number","text","text"]
+
+  context = {
+    "request":request,
+    "entradas": [a for a in zip(entradas,tipos)]
+  }
+  return templates.TemplateResponse("crear_productos_planilla.html", context)
 
 templates = Jinja2Templates(directory="templates")
 
 app.include_router(productos_router.router)
-
 app.include_router(categorias_router.router)
-
 app.include_router(usuarios_router.router)
-
 app.include_router(ventas_router.router)
