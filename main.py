@@ -13,6 +13,8 @@ from routers.categorias import main as categorias_router
 from routers.usuarios import main as usuarios_router
 from routers.ventas import main as ventas_router
 from schemas import productos as productos_schemas
+from schemas import categorias as categorias_schemas
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -53,9 +55,25 @@ async def index(request:Request):
   }
   return templates.TemplateResponse("crear_productos_planilla.html", context)
 
+@app.get('/crear_categoria')
+async def index(request:Request):
+  entradas = eval(categorias_schemas.CategoriaCreate.schema_json())["properties"].keys()
+
+  tipos = ["text","text"]
+
+  print(str(request.url.path))
+
+  context = {
+    "request":request,
+    "entradas": [a for a in zip(entradas,tipos)],
+    "url": str(request.url.path)
+  }
+  return templates.TemplateResponse("crear_categoria.html", context)
+
 templates = Jinja2Templates(directory="templates")
 
 app.include_router(productos_router.router)
 app.include_router(categorias_router.router)
 app.include_router(usuarios_router.router)
 app.include_router(ventas_router.router)
+

@@ -36,7 +36,6 @@ let href = window.location.href
 
 let split_href = href.split("/")
 let goal_href = split_href[split_href.length - 1]
-
 let split_href_buscar = href.split("?")
 let goal_href_buscar = split_href_buscar[split_href_buscar.length - 1]
 

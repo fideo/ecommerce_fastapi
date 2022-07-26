@@ -1,0 +1,29 @@
+{% include 'cabecera.html' %} {% include 'navegacion.html' %} 
+  <div class="container max-w-full">
+    <div class="relative py-16 bg-gradient-to-br from-sky-50 to-gray-200">  
+        <div class="relative container m-auto px-6 text-gray-500 md:px-12 xl:px-40">
+            <div class="m-auto md:w-8/12 lg:w-6/12 xl:w-6/12">
+                <div class="rounded-xl bg-white shadow-xl">
+                    <div class="p-6 sm:p-16">
+                      {% for variable in entradas %}
+                          {%set tipo = variable[1]%}
+                          {%set variable = variable[0]%}
+                          {%set variable_id = "post_"+variable%}
+                          <div class="mt-16 grid space-y-4">
+                          <p class="mb-8 text-2xl text-center"> {{variable}}:</p>
+                          <input class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-2x1 focus:outline-none"
+                                type={{tipo}} id={{variable_id}} name={{variable}} placeholder="Ingresar {{variable}}">
+                          </div>
+                      {% endfor %}
+                      <div class="mt-16 grid space-y-4">
+                      <button id="boton_crear_categoria" name="crear producto" type="submit" class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 
+                      hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100 mb-8 text-2xl text-center text-cyan-900 font-bold">Crear Categoría</button>
+                      </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+{% include 'piedepagina.html' %}
